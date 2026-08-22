@@ -1,11 +1,21 @@
 {
   "metadata": {
-    "version": "1.0",
-    "description": "Deterministic eligibility records for a small set of centrally administered Government of India schemes.",
-    "scheme_count": 3,
+    "version": "2.0",
+    "description": "Expanded catalogue of centrally administered Government of India schemes across health, pension, housing, financial inclusion, women & child development, and agriculture sectors.",
+    "scheme_count": 17,
     "source_policy": "Official government or statutory-regulator sources only. Eligibility is a preliminary check; the administering authority makes the final decision.",
-    "last_verified": "2026-08-20",
-    "status": "verified"
+    "last_verified": "2026-08-23",
+    "status": "verified",
+    "categories": [
+      "pension",
+      "health",
+      "housing",
+      "financial_inclusion",
+      "women_and_child",
+      "agriculture",
+      "education",
+      "social_security"
+    ]
   },
   "schemes": [
     {
@@ -24,19 +34,35 @@
       "jurisdiction": {
         "country": "India",
         "level": "central",
-        "states": ["ALL"]
+        "states": [
+          "ALL"
+        ]
       },
       "eligibility_schema": {
         "version": "1.0",
         "additional_properties": false,
         "dependencies": {
-          "is_unorganised_worker": {"type": "boolean"},
-          "age": {"type": "integer"},
-          "monthly_income": {"type": "number"},
-          "is_income_tax_payer": {"type": "boolean"},
-          "covered_by_epfo": {"type": "boolean"},
-          "covered_by_esic": {"type": "boolean"},
-          "covered_by_nps": {"type": "boolean"}
+          "is_unorganised_worker": {
+            "type": "boolean"
+          },
+          "age": {
+            "type": "integer"
+          },
+          "monthly_income": {
+            "type": "number"
+          },
+          "is_income_tax_payer": {
+            "type": "boolean"
+          },
+          "covered_by_epfo": {
+            "type": "boolean"
+          },
+          "covered_by_esic": {
+            "type": "boolean"
+          },
+          "covered_by_nps": {
+            "type": "boolean"
+          }
         }
       },
       "eligibility_rules": [
@@ -57,7 +83,10 @@
           "id": "pm_sym_age",
           "field": "age",
           "operator": "between_inclusive",
-          "value": [18, 40],
+          "value": [
+            18,
+            40
+          ],
           "effect": "require",
           "description": "Entry age is from 18 through 40 years, inclusive.",
           "pass_message": "Your age is within the official 18-to-40 entry-age range.",
@@ -177,17 +206,29 @@
       "jurisdiction": {
         "country": "India",
         "level": "central",
-        "states": ["ALL"]
+        "states": [
+          "ALL"
+        ]
       },
       "eligibility_schema": {
         "version": "1.0",
         "additional_properties": false,
         "dependencies": {
-          "is_indian_citizen": {"type": "boolean"},
-          "age": {"type": "integer"},
-          "has_savings_account": {"type": "boolean"},
-          "is_or_has_been_income_tax_payer": {"type": "boolean"},
-          "already_has_apy_account": {"type": "boolean"}
+          "is_indian_citizen": {
+            "type": "boolean"
+          },
+          "age": {
+            "type": "integer"
+          },
+          "has_savings_account": {
+            "type": "boolean"
+          },
+          "is_or_has_been_income_tax_payer": {
+            "type": "boolean"
+          },
+          "already_has_apy_account": {
+            "type": "boolean"
+          }
         }
       },
       "eligibility_rules": [
@@ -208,7 +249,10 @@
           "id": "apy_age",
           "field": "age",
           "operator": "between_inclusive",
-          "value": [18, 40],
+          "value": [
+            18,
+            40
+          ],
           "effect": "require",
           "description": "Entry age is from 18 through the 40th birthday.",
           "pass_message": "Your age is within the official APY entry-age range.",
@@ -306,22 +350,44 @@
       "jurisdiction": {
         "country": "India",
         "level": "central_with_state_verification",
-        "states": ["ALL"]
+        "states": [
+          "ALL"
+        ]
       },
       "eligibility_schema": {
         "version": "1.0",
         "additional_properties": false,
         "dependencies": {
-          "is_landholding_farmer_family": {"type": "boolean"},
-          "land_acquired_after_2019_02_01_other_than_inheritance": {"type": "boolean"},
-          "is_institutional_landholder": {"type": "boolean"},
-          "family_member_holds_or_held_constitutional_post": {"type": "boolean"},
-          "family_member_in_excluded_elected_office": {"type": "boolean"},
-          "family_member_is_non_exempt_government_employee": {"type": "boolean"},
-          "family_member_is_non_exempt_pensioner_10000_or_more": {"type": "boolean"},
-          "family_member_paid_income_tax_last_assessment_year": {"type": "boolean"},
-          "family_member_is_practising_registered_professional": {"type": "boolean"},
-          "family_is_nri_for_new_beneficiary_rule": {"type": "boolean"}
+          "is_landholding_farmer_family": {
+            "type": "boolean"
+          },
+          "land_acquired_after_2019_02_01_other_than_inheritance": {
+            "type": "boolean"
+          },
+          "is_institutional_landholder": {
+            "type": "boolean"
+          },
+          "family_member_holds_or_held_constitutional_post": {
+            "type": "boolean"
+          },
+          "family_member_in_excluded_elected_office": {
+            "type": "boolean"
+          },
+          "family_member_is_non_exempt_government_employee": {
+            "type": "boolean"
+          },
+          "family_member_is_non_exempt_pensioner_10000_or_more": {
+            "type": "boolean"
+          },
+          "family_member_paid_income_tax_last_assessment_year": {
+            "type": "boolean"
+          },
+          "family_member_is_practising_registered_professional": {
+            "type": "boolean"
+          },
+          "family_is_nri_for_new_beneficiary_rule": {
+            "type": "boolean"
+          }
         }
       },
       "eligibility_rules": [
@@ -493,6 +559,1044 @@
       "source_type": "official_government_guidelines",
       "status": "verified_with_state_verification",
       "verification_note": "State/UT land records and approved local identification mechanisms control beneficiary identification. This engine cannot validate land records, Aadhaar, eKYC, family composition, or official databases; final eligibility requires State/UT and scheme verification."
+    },
+    {
+      "id": "pm-jay",
+      "name": "Pradhan Mantri Jan Arogya Yojana",
+      "short_name": "PM-JAY (Ayushman Bharat)",
+      "category": "health",
+      "aliases": [
+        "Ayushman Bharat",
+        "AB-PMJAY",
+        "health insurance scheme"
+      ],
+      "description": "Ayushman Bharat - Pradhan Mantri Jan Arogya Yojana provides health cover of Rs 5 lakh per family per year for secondary and tertiary care hospitalization to eligible families identified through SECC 2011 and state-specific criteria.",
+      "benefit_summary": "Health cover up to Rs 5 lakh per family per year for hospitalization, covering pre and post hospitalization expenses, with no cap on family size, age, or gender.",
+      "target_group": "Families identified in SECC 2011 and state-specific databases",
+      "eligibility_scope": "existing_database_beneficiary",
+      "jurisdiction": {
+        "country": "India",
+        "level": "central_with_state_implementation",
+        "states": [
+          "ALL"
+        ]
+      },
+      "eligibility_rules": [
+        {
+          "id": "pmjay_secc_listed",
+          "field": "listed_in_secc_2011_or_state_database",
+          "operator": "eq",
+          "value": true,
+          "effect": "require",
+          "description": "Beneficiary must be listed in SECC 2011 database or state-specific beneficiary database",
+          "pass_message": "Your family is listed in the eligible beneficiary database",
+          "fail_message": "PM-JAY coverage is based on inclusion in SECC 2011 or state databases",
+          "question": "Is your family listed in SECC 2011 deprivation/occupation criteria or state-specific PM-JAY database?"
+        }
+      ],
+      "required_documents": [
+        "Aadhaar card or alternative ID proof",
+        "Ration card (if applicable)",
+        "SECC/state database reference number"
+      ],
+      "application_process": [
+        "Verify your family's inclusion via PM-JAY website or helpline",
+        "Visit empanelled hospital with Aadhaar/ID proof",
+        "Hospital verifies eligibility and issues e-card",
+        "Cashless treatment at empanelled hospitals across India"
+      ],
+      "official_portal_url": "https://pmjay.gov.in/",
+      "helpline": "14555",
+      "source": "National Health Authority, Government of India",
+      "source_url": "https://pmjay.gov.in/",
+      "effective_date": "2018-09-23",
+      "last_verified": "2026-08-23",
+      "status": "active"
+    },
+    {
+      "id": "pm-ujjvala",
+      "name": "Pradhan Mantri Ujjvala Yojana",
+      "short_name": "PMUY",
+      "category": "women_and_child",
+      "aliases": [
+        "Ujjvala Yojana",
+        "LPG connection scheme",
+        "free gas connection"
+      ],
+      "description": "Provides deposit-free LPG connections to women from BPL households, SECC enlisted households, and other specified categories to reduce indoor air pollution and improve health outcomes.",
+      "benefit_summary": "Deposit-free LPG connection with financial assistance for stove and first refill, EMI facility for stove purchase",
+      "target_group": "Women from BPL/SECC households and specified welfare schemes",
+      "eligibility_scope": "new_connection",
+      "jurisdiction": {
+        "country": "India",
+        "level": "central",
+        "states": [
+          "ALL"
+        ]
+      },
+      "eligibility_rules": [
+        {
+          "id": "pmuy_female_applicant",
+          "field": "is_female_applicant",
+          "operator": "eq",
+          "value": true,
+          "effect": "require",
+          "description": "Applicant must be a woman (adult female) of the household",
+          "pass_message": "Applicant is an adult female",
+          "fail_message": "PMUY connection is issued in the name of an adult woman of the household",
+          "question": "Is the applicant an adult female member of the household?"
+        },
+        {
+          "id": "pmuy_eligible_category",
+          "field": "belongs_to_eligible_category",
+          "operator": "eq",
+          "value": true,
+          "effect": "require",
+          "description": "Household belongs to SECC 2011, AAY, BPL, or other specified welfare schemes (PM-JAY, Antyodaya Ann Yojana, etc.)",
+          "pass_message": "Household belongs to eligible category",
+          "fail_message": "Household must belong to SECC, BPL, or specified welfare schemes",
+          "question": "Does the household belong to SECC 2011, BPL, PM-JAY, or other specified categories?"
+        },
+        {
+          "id": "pmuy_no_lpg_connection",
+          "field": "already_has_lpg_connection",
+          "operator": "eq",
+          "value": true,
+          "effect": "disqualify",
+          "description": "No household member should have an LPG connection in their name",
+          "pass_message": "No existing LPG connection in household",
+          "fail_message": "Household already has an LPG connection",
+          "question": "Does any member of the household already have an LPG connection?"
+        }
+      ],
+      "required_documents": [
+        "BPL card or SECC name/PM-JAY card",
+        "Aadhaar card of applicant",
+        "Bank account details",
+        "Address proof",
+        "BPL certificate from Gram Panchayat/Municipal authority"
+      ],
+      "application_process": [
+        "Visit nearest LPG distributor with required documents",
+        "Fill PMUY application form (KYC form)",
+        "Submit documents for verification",
+        "Connection installed at doorstep after verification"
+      ],
+      "official_portal_url": "https://www.pmuy.gov.in/",
+      "helpline": "1906",
+      "source": "Ministry of Petroleum & Natural Gas",
+      "source_url": "https://www.pmuy.gov.in/",
+      "effective_date": "2016-05-01",
+      "last_verified": "2026-08-23",
+      "status": "active"
+    },
+    {
+      "id": "pm-awas-gramin",
+      "name": "Pradhan Mantri Awas Yojana - Gramin",
+      "short_name": "PMAY-G",
+      "category": "housing",
+      "aliases": [
+        "Rural housing scheme",
+        "IAY successor",
+        "PM Awas Rural"
+      ],
+      "description": "Provides financial assistance to rural households without pucca houses to construct new houses or upgrade existing kutcha houses, with higher assistance for hilly/difficult areas.",
+      "benefit_summary": "Rs 1.20 lakh (plain areas) or Rs 1.30 lakh (hilly/difficult areas) in 3 installments for house construction, with toilet, electricity, and LPG connection convergence",
+      "target_group": "Houseless and kutcha house households in rural areas",
+      "eligibility_scope": "secc_2011_exclusion_criteria",
+      "jurisdiction": {
+        "country": "India",
+        "level": "central_with_state_implementation",
+        "states": [
+          "ALL"
+        ]
+      },
+      "eligibility_rules": [
+        {
+          "id": "pmayg_secc_homeless",
+          "field": "secc_homeless_or_kutcha",
+          "operator": "eq",
+          "value": true,
+          "effect": "require",
+          "description": "Household is homeless or lives in kutcha house with 0-1-2 rooms as per SECC 2011",
+          "pass_message": "Household meets SECC housing deprivation criteria",
+          "fail_message": "Household must be homeless or in kutcha house as per SECC 2011",
+          "question": "Is the household homeless or living in a kutcha house with 0, 1, or 2 rooms as per SECC 2011?"
+        },
+        {
+          "id": "pmayg_exclusion",
+          "field": "meets_exclusion_criteria",
+          "operator": "eq",
+          "value": true,
+          "effect": "disqualify",
+          "description": "Household should not fall under SECC automatic exclusion (govt employee, tax payer, pucca house owner, etc.)",
+          "pass_message": "Household does not fall under automatic exclusion",
+          "fail_message": "Household falls under SECC automatic exclusion criteria",
+          "question": "Does the household have govt job, pay tax, own pucca house, or fall under SECC exclusion?"
+        }
+      ],
+      "required_documents": [
+        "Aadhaar card",
+        "Bank account passbook with Aadhaar seeding",
+        "SECC data verification by Gram Sabha",
+        "Swachh Bharat Mission toilet certificate (for second installment)",
+        "Geo-tagged photographs at each construction stage"
+      ],
+      "application_process": [
+        "Wait for selection via SECC 2011/Awaas+ portal by Gram Sabha",
+        "Verification of SECC data and Gram Sabha approval",
+        "Registration on Awaas+ portal with Aadhaar and bank details",
+        "Installments released based on construction progress with geo-tagged photos",
+        "Convergence with SBM (toilet), SAUBHAGYA (electricity), PMUY (LPG)"
+      ],
+      "official_portal_url": "https://pmayg.nic.in/",
+      "helpline": "1800-11-6446",
+      "source": "Ministry of Rural Development",
+      "source_url": "https://pmayg.nic.in/",
+      "effective_date": "2016-04-01",
+      "last_verified": "2026-08-23",
+      "status": "active"
+    },
+    {
+      "id": "pm-awas-urban",
+      "name": "Pradhan Mantri Awas Yojana - Urban",
+      "short_name": "PMAY-U",
+      "category": "housing",
+      "aliases": [
+        "Urban housing scheme",
+        "PM Awas Urban",
+        "EWS/LIG housing"
+      ],
+      "description": "Provides affordable housing to urban poor through four verticals: In-situ Slum Redevelopment, Credit Linked Subsidy Scheme (CLSS), Affordable Housing in Partnership (AHP), and Beneficiary-led Construction/Enhancement (BLC).",
+      "benefit_summary": "Credit Linked Subsidy of Rs 2.67 lakh for EWS/LIG, Rs 2.35 lakh for MIG-I, Rs 2.30 lakh for MIG-II on home loans, or direct assistance of Rs 1.5 lakh for BLC",
+      "target_group": "EWS, LIG, MIG urban households without pucca house",
+      "eligibility_scope": "first_pucca_house",
+      "jurisdiction": {
+        "country": "India",
+        "level": "central_with_state_implementation",
+        "states": [
+          "ALL"
+        ]
+      },
+      "eligibility_rules": [
+        {
+          "id": "pmayu_income_eligible",
+          "field": "annual_household_income",
+          "operator": "lte",
+          "value": 1800000,
+          "effect": "require",
+          "description": "Annual household income up to Rs 18 lakh (EWS: up to 3L, LIG: 3-6L, MIG-I: 6-12L, MIG-II: 12-18L)",
+          "pass_message": "Household income is within eligible range",
+          "fail_message": "Household income exceeds Rs 18 lakh limit",
+          "question": "What is the annual household income?"
+        },
+        {
+          "id": "pmayu_first_house",
+          "field": "owns_pucca_house_in_india",
+          "operator": "eq",
+          "value": true,
+          "effect": "disqualify",
+          "description": "Beneficiary or family member should not own a pucca house in India",
+          "pass_message": "No pucca house owned by family",
+          "fail_message": "Beneficiary or family already owns a pucca house",
+          "question": "Do you or any family member own a pucca house anywhere in India?"
+        },
+        {
+          "id": "pmayu_adult_woman",
+          "field": "house_in_woman_name_or_joint",
+          "operator": "eq",
+          "value": false,
+          "effect": "disqualify",
+          "description": "House should be in name of adult female or jointly owned (EWS mandatory, others encouraged)",
+          "pass_message": "House will be in adult female's name or joint ownership",
+          "fail_message": "For EWS, house must be in adult female's name or joint ownership",
+          "question": "For EWS category, will the house be in adult female member's name or joint ownership?"
+        }
+      ],
+      "required_documents": [
+        "Aadhaar card",
+        "Income certificate",
+        "Proof of residence in urban area",
+        "Bank account details",
+        "Affidavit of no pucca house ownership",
+        "Sanction letter from lending institution (for CLSS)"
+      ],
+      "application_process": [
+        "Register on PMAY-U portal (pmaymis.gov.in)",
+        "Fill application for relevant vertical (CLSS/AHP/BLC/ISSR)",
+        "Submit required documents and get ULB verification",
+        "For CLSS: Apply for home loan with participating bank/HFC",
+        "For BLC: Get construction approval and receive installments based on progress",
+        "Track application status on PMAY-U portal"
+      ],
+      "official_portal_url": "https://pmaymis.gov.in/",
+      "helpline": "011-23063285, 011-23060484",
+      "source": "Ministry of Housing and Urban Affairs",
+      "source_url": "https://pmaymis.gov.in/",
+      "effective_date": "2015-06-25",
+      "last_verified": "2026-08-23",
+      "status": "active"
+    },
+    {
+      "id": "pmmy",
+      "name": "Pradhan Mantri MUDRA Yojana",
+      "short_name": "PMMY",
+      "category": "financial_inclusion",
+      "aliases": [
+        "MUDRA Loan",
+        "Micro Units Development Refinance Agency",
+        "Shishu Kishor Tarun"
+      ],
+      "description": "Provides collateral-free loans up to Rs 10 lakh to micro/small business units under three categories: Shishu (up to Rs 50,000), Kishor (Rs 50,001 to Rs 5 lakh), Tarun (Rs 5,00,001 to Rs 10 lakh).",
+      "benefit_summary": "Collateral-free business loans for income-generating activities, with lower interest rates and flexible repayment terms",
+      "target_group": "Non-corporate, non-farm small/micro enterprises",
+      "eligibility_scope": "business_loan_eligibility",
+      "jurisdiction": {
+        "country": "India",
+        "level": "central",
+        "states": [
+          "ALL"
+        ]
+      },
+      "eligibility_rules": [
+        {
+          "id": "pmmy_income_generating",
+          "field": "is_income_generating_activity",
+          "operator": "eq",
+          "value": true,
+          "effect": "require",
+          "description": "Loan for income-generating micro-enterprise activity (manufacturing, trading, services)",
+          "pass_message": "Activity is income-generating micro-enterprise",
+          "fail_message": "MUDRA loans are for income-generating business activities only",
+          "question": "Is the loan for an income-generating business activity (manufacturing/trading/services)?"
+        },
+        {
+          "id": "pmmy_non_corporate",
+          "field": "is_corporate_entity",
+          "operator": "eq",
+          "value": true,
+          "effect": "disqualify",
+          "description": "Corporate entities are not eligible for MUDRA loans",
+          "pass_message": "Applicant is not a corporate entity",
+          "fail_message": "MUDRA loans are for non-corporate small enterprises",
+          "question": "Is the applicant a corporate entity (company/corporation)?"
+        },
+        {
+          "id": "pmmy_loan_amount",
+          "field": "loan_amount",
+          "operator": "lte",
+          "value": 1000000,
+          "effect": "require",
+          "description": "Loan amount up to Rs 10 lakh",
+          "pass_message": "Loan amount is within Rs 10 lakh limit",
+          "fail_message": "MUDRA loan limit is Rs 10 lakh",
+          "question": "Is the required loan amount up to Rs 10 lakh?"
+        }
+      ],
+      "required_documents": [
+        "Identity proof (Aadhaar/PAN/Voter ID)",
+        "Address proof",
+        "Business plan or activity details",
+        "Quotation for equipment/assets (if applicable)",
+        "Bank statements (last 6 months for existing business)",
+        "Passport size photographs",
+        "Caste certificate (for SC/ST applicants)"
+      ],
+      "application_process": [
+        "Identify loan category: Shishu (<50K), Kishor (50K-5L), or Tarun (5L-10L)",
+        "Approach any bank, NBFC, or MFI offering MUDRA loans",
+        "Fill loan application with business details",
+        "Submit required documents",
+        "Bank evaluates and sanctions loan without collateral",
+        "Loan disbursed to bank account"
+      ],
+      "official_portal_url": "https://www.mudra.org.in/",
+      "helpline": "1800-180-0111",
+      "source": "Micro Units Development & Refinance Agency Ltd",
+      "source_url": "https://www.mudra.org.in/",
+      "effective_date": "2015-04-08",
+      "last_verified": "2026-08-23",
+      "status": "active"
+    },
+    {
+      "id": "nsap-old-age",
+      "name": "National Social Assistance Programme - Indira Gandhi National Old Age Pension Scheme",
+      "short_name": "IGNOAPS",
+      "category": "social_security",
+      "aliases": [
+        "Old Age Pension",
+        "NSAP Old Age",
+        "Vridha Pension"
+      ],
+      "description": "Provides monthly pension to elderly persons aged 60 years and above living below poverty line. Central assistance of Rs 200-500 per month supplemented by state contributions.",
+      "benefit_summary": "Rs 200 per month (60-79 years), Rs 500 per month (80+ years) from Central Government, plus state top-up",
+      "target_group": "Elderly BPL persons aged 60+",
+      "eligibility_scope": "age_and_poverty_based",
+      "jurisdiction": {
+        "country": "India",
+        "level": "central_with_state_supplement",
+        "states": [
+          "ALL"
+        ]
+      },
+      "eligibility_rules": [
+        {
+          "id": "ignoaps_age",
+          "field": "age",
+          "operator": "gte",
+          "value": 60,
+          "effect": "require",
+          "description": "Applicant must be 60 years or above",
+          "pass_message": "Applicant is 60 years or older",
+          "fail_message": "Minimum age for old age pension is 60 years",
+          "question": "What is the applicant's age?"
+        },
+        {
+          "id": "ignoaps_bpl",
+          "field": "is_bpl",
+          "operator": "eq",
+          "value": true,
+          "effect": "require",
+          "description": "Applicant must be living below poverty line",
+          "pass_message": "Applicant is BPL",
+          "fail_message": "IGNOAPS is for elderly persons below poverty line",
+          "question": "Does the applicant belong to BPL category?"
+        },
+        {
+          "id": "ignoaps_no_regular_income",
+          "field": "has_regular_income_source",
+          "operator": "eq",
+          "value": true,
+          "effect": "disqualify",
+          "description": "Applicant should have little or no regular means of subsistence",
+          "pass_message": "Applicant has little or no regular income",
+          "fail_message": "Applicant has regular income source",
+          "question": "Does the applicant have a regular source of income or financial support?"
+        }
+      ],
+      "required_documents": [
+        "Age proof (Birth certificate/School certificate/Aadhaar)",
+        "BPL card",
+        "Aadhaar card",
+        "Bank account passbook",
+        "Income certificate",
+        "Residence proof"
+      ],
+      "application_process": [
+        "Obtain application form from local Panchayat/Urban Local Body",
+        "Fill form with required details",
+        "Attach required documents",
+        "Submit to Gram Panchayat (rural) or ULB (urban)",
+        "Verification by local authority",
+        "Pension credited monthly to bank account after approval"
+      ],
+      "official_portal_url": "https://nsap.nic.in/",
+      "helpline": "State-specific helplines",
+      "source": "Ministry of Rural Development",
+      "source_url": "https://nsap.nic.in/",
+      "effective_date": "1995-08-15",
+      "last_verified": "2026-08-23",
+      "status": "active"
+    },
+    {
+      "id": "nsap-widow",
+      "name": "National Social Assistance Programme - Indira Gandhi National Widow Pension Scheme",
+      "short_name": "IGNWPS",
+      "category": "social_security",
+      "aliases": [
+        "Widow Pension",
+        "NSAP Widow",
+        "Vidhwa Pension"
+      ],
+      "description": "Provides monthly pension to widows aged 40-59 years living below poverty line. Central assistance of Rs 300 per month supplemented by state contributions.",
+      "benefit_summary": "Rs 300 per month from Central Government for widows aged 40-59 years, plus state top-up",
+      "target_group": "BPL widows aged 40-59 years",
+      "eligibility_scope": "age_poverty_marital_status",
+      "jurisdiction": {
+        "country": "India",
+        "level": "central_with_state_supplement",
+        "states": [
+          "ALL"
+        ]
+      },
+      "eligibility_rules": [
+        {
+          "id": "ignwps_widow",
+          "field": "is_widow",
+          "operator": "eq",
+          "value": true,
+          "effect": "require",
+          "description": "Applicant must be a widow",
+          "pass_message": "Applicant is a widow",
+          "fail_message": "IGNWPS is for widows only",
+          "question": "Is the applicant a widow?"
+        },
+        {
+          "id": "ignwps_age",
+          "field": "age",
+          "operator": "between_inclusive",
+          "value": [
+            40,
+            59
+          ],
+          "effect": "require",
+          "description": "Applicant must be between 40-59 years (at 60, eligible for old age pension)",
+          "pass_message": "Applicant's age is within 40-59 range",
+          "fail_message": "IGNWPS is for widows aged 40-59 years (60+ eligible for old age pension)",
+          "question": "What is the applicant's age?"
+        },
+        {
+          "id": "ignwps_bpl",
+          "field": "is_bpl",
+          "operator": "eq",
+          "value": true,
+          "effect": "require",
+          "description": "Applicant must be living below poverty line",
+          "pass_message": "Applicant is BPL",
+          "fail_message": "IGNWPS is for widows below poverty line",
+          "question": "Does the applicant belong to BPL category?"
+        }
+      ],
+      "required_documents": [
+        "Widow certificate from Tehsildar/SDM",
+        "Age proof",
+        "BPL card",
+        "Aadhaar card",
+        "Bank account passbook",
+        "Residence proof",
+        "Income certificate"
+      ],
+      "application_process": [
+        "Obtain widow certificate from local authorities",
+        "Get application form from Gram Panchayat/ULB",
+        "Fill form and attach documents",
+        "Submit to local authority",
+        "Verification and approval",
+        "Monthly pension credited to bank account"
+      ],
+      "official_portal_url": "https://nsap.nic.in/",
+      "helpline": "State-specific helplines",
+      "source": "Ministry of Rural Development",
+      "source_url": "https://nsap.nic.in/",
+      "effective_date": "2009-02-01",
+      "last_verified": "2026-08-23",
+      "status": "active"
+    },
+    {
+      "id": "nsap-disability",
+      "name": "National Social Assistance Programme - Indira Gandhi National Disability Pension Scheme",
+      "short_name": "IGNDPS",
+      "category": "social_security",
+      "aliases": [
+        "Disability Pension",
+        "NSAP Disability",
+        "Divyang Pension"
+      ],
+      "description": "Provides monthly pension to persons with severe or multiple disabilities (80% or more) aged 18 years and above living below poverty line. Central assistance of Rs 300-500 per month.",
+      "benefit_summary": "Rs 300 per month (18-79 years), Rs 500 per month (80+ years) from Central Government, plus state top-up",
+      "target_group": "BPL persons with severe disability (80%+) aged 18+",
+      "eligibility_scope": "disability_poverty_based",
+      "jurisdiction": {
+        "country": "India",
+        "level": "central_with_state_supplement",
+        "states": [
+          "ALL"
+        ]
+      },
+      "eligibility_rules": [
+        {
+          "id": "igndps_disability",
+          "field": "disability_percentage",
+          "operator": "gte",
+          "value": 80,
+          "effect": "require",
+          "description": "Applicant must have severe disability (80% or more)",
+          "pass_message": "Applicant has 80%+ disability",
+          "fail_message": "Minimum 80% disability required for IGNDPS",
+          "question": "What is the certified disability percentage?"
+        },
+        {
+          "id": "igndps_age",
+          "field": "age",
+          "operator": "gte",
+          "value": 18,
+          "effect": "require",
+          "description": "Applicant must be 18 years or above",
+          "pass_message": "Applicant is 18 years or older",
+          "fail_message": "Minimum age for disability pension is 18 years",
+          "question": "What is the applicant's age?"
+        },
+        {
+          "id": "igndps_bpl",
+          "field": "is_bpl",
+          "operator": "eq",
+          "value": true,
+          "effect": "require",
+          "description": "Applicant must be living below poverty line",
+          "pass_message": "Applicant is BPL",
+          "fail_message": "IGNDPS is for persons with disabilities below poverty line",
+          "question": "Does the applicant belong to BPL category?"
+        }
+      ],
+      "required_documents": [
+        "Disability certificate from competent medical authority (80%+ disability)",
+        "Age proof",
+        "BPL card",
+        "Aadhaar card",
+        "Bank account passbook",
+        "Residence proof",
+        "Income certificate"
+      ],
+      "application_process": [
+        "Obtain disability certificate from District Medical Board (80%+ disability)",
+        "Get application form from Gram Panchayat/ULB",
+        "Fill form and attach documents",
+        "Submit to local authority",
+        "Verification and approval",
+        "Monthly pension credited to bank account"
+      ],
+      "official_portal_url": "https://nsap.nic.in/",
+      "helpline": "State-specific helplines",
+      "source": "Ministry of Rural Development",
+      "source_url": "https://nsap.nic.in/",
+      "effective_date": "2009-02-01",
+      "last_verified": "2026-08-23",
+      "status": "active"
+    },
+    {
+      "id": "nsap-family-benefit",
+      "name": "National Social Assistance Programme - National Family Benefit Scheme",
+      "short_name": "NFBS",
+      "category": "social_security",
+      "aliases": [
+        "Family Benefit Scheme",
+        "NSAP Death Benefit",
+        "Mrityu Sahayata"
+      ],
+      "description": "Provides one-time lump sum assistance of Rs 20,000 to BPL households on death of primary breadwinner aged 18-59 years.",
+      "benefit_summary": "One-time assistance of Rs 20,000 to bereaved BPL family",
+      "target_group": "BPL families who lost primary breadwinner (18-59 years)",
+      "eligibility_scope": "breadwinner_death_benefit",
+      "jurisdiction": {
+        "country": "India",
+        "level": "central",
+        "states": [
+          "ALL"
+        ]
+      },
+      "eligibility_rules": [
+        {
+          "id": "nfbs_breadwinner_death",
+          "field": "is_primary_breadwinner_deceased",
+          "operator": "eq",
+          "value": true,
+          "effect": "require",
+          "description": "Death of primary breadwinner of the household",
+          "pass_message": "Primary breadwinner is deceased",
+          "fail_message": "NFBS is for families who lost primary breadwinner",
+          "question": "Was the deceased the primary breadwinner of the family?"
+        },
+        {
+          "id": "nfbs_age_at_death",
+          "field": "age_at_death",
+          "operator": "between_inclusive",
+          "value": [
+            18,
+            59
+          ],
+          "effect": "require",
+          "description": "Deceased must have been between 18-59 years of age",
+          "pass_message": "Deceased's age was within 18-59 range",
+          "fail_message": "NFBS applies to breadwinner aged 18-59 years at time of death",
+          "question": "What was the age of the deceased at the time of death?"
+        },
+        {
+          "id": "nfbs_bpl",
+          "field": "is_bpl_family",
+          "operator": "eq",
+          "value": true,
+          "effect": "require",
+          "description": "Family must be living below poverty line",
+          "pass_message": "Family is BPL",
+          "fail_message": "NFBS is for families below poverty line",
+          "question": "Does the family belong to BPL category?"
+        }
+      ],
+      "required_documents": [
+        "Death certificate of breadwinner",
+        "Age proof of deceased",
+        "BPL card",
+        "Aadhaar card of claimant (family member)",
+        "Bank account details of claimant",
+        "Relationship proof between claimant and deceased",
+        "Affidavit stating deceased was primary breadwinner"
+      ],
+      "application_process": [
+        "Apply within specified time limit after death (usually 30-45 days, varies by state)",
+        "Obtain application form from Gram Panchayat/ULB",
+        "Fill form and attach required documents including death certificate",
+        "Submit to local authority",
+        "Verification by authorities",
+        "One-time payment of Rs 20,000 credited to family member's account"
+      ],
+      "official_portal_url": "https://nsap.nic.in/",
+      "helpline": "State-specific helplines",
+      "source": "Ministry of Rural Development",
+      "source_url": "https://nsap.nic.in/",
+      "effective_date": "1995-08-15",
+      "last_verified": "2026-08-23",
+      "status": "active"
+    },
+    {
+      "id": "sukanya-samriddhi",
+      "name": "Sukanya Samriddhi Yojana",
+      "short_name": "SSY",
+      "category": "women_and_child",
+      "aliases": [
+        "Girl child savings scheme",
+        "Sukanya Yojana",
+        "Beti Bachao savings"
+      ],
+      "description": "Small savings scheme for girl child, offering attractive interest rates and tax benefits under Section 80C. Account can be opened from birth till age 10, with deposits allowed for 15 years, maturing after 21 years from opening.",
+      "benefit_summary": "High interest rate (currently 8.2%), tax exemption on deposits (80C), interest, and maturity (EEE status), sovereign guarantee",
+      "target_group": "Parents/guardians of girl child up to age 10",
+      "eligibility_scope": "girl_child_savings",
+      "jurisdiction": {
+        "country": "India",
+        "level": "central",
+        "states": [
+          "ALL"
+        ]
+      },
+      "eligibility_rules": [
+        {
+          "id": "ssy_girl_child",
+          "field": "is_girl_child",
+          "operator": "eq",
+          "value": true,
+          "effect": "require",
+          "description": "Account must be for a girl child",
+          "pass_message": "Account is for a girl child",
+          "fail_message": "SSY accounts can only be opened for girl children",
+          "question": "Is the account being opened for a girl child?"
+        },
+        {
+          "id": "ssy_age",
+          "field": "girl_child_age",
+          "operator": "lte",
+          "value": 10,
+          "effect": "require",
+          "description": "Girl child must be below 10 years of age at the time of opening account",
+          "pass_message": "Girl child is below 10 years",
+          "fail_message": "SSY account can only be opened till the girl child is 10 years old",
+          "question": "What is the age of the girl child?"
+        },
+        {
+          "id": "ssy_max_accounts",
+          "field": "existing_ssy_accounts_count",
+          "operator": "gte",
+          "value": 2,
+          "effect": "disqualify",
+          "description": "Maximum 2 accounts allowed per family (one per girl child)",
+          "pass_message": "Within account limit",
+          "fail_message": "Maximum 2 SSY accounts allowed per family",
+          "question": "How many SSY accounts does the family already have?"
+        }
+      ],
+      "required_documents": [
+        "Birth certificate of girl child",
+        "Identity proof of parent/guardian (Aadhaar/PAN)",
+        "Address proof of parent/guardian",
+        "Passport size photographs (girl child and guardian)",
+        "Initial deposit (minimum Rs 250)"
+      ],
+      "application_process": [
+        "Visit nearest Post Office or authorized bank branch",
+        "Fill SSY account opening form",
+        "Submit birth certificate and guardian's KYC documents",
+        "Make initial deposit (minimum Rs 250)",
+        "Receive passbook after account opening",
+        "Make annual deposits (minimum Rs 250, maximum Rs 1.5 lakh) for 15 years"
+      ],
+      "official_portal_url": "https://www.indiapost.gov.in/VAS/Pages/suchetakreti.aspx",
+      "helpline": "1800-180-1111 (India Post), bank-specific helplines",
+      "source": "Ministry of Finance - National Savings Institute",
+      "source_url": "https://www.indiapost.gov.in/VAS/Pages/suchetakreti.aspx",
+      "effective_date": "2015-01-22",
+      "last_verified": "2026-08-23",
+      "status": "active"
+    },
+    {
+      "id": "pm-scholarship",
+      "name": "Prime Minister's Scholarship Scheme",
+      "short_name": "PMSS",
+      "category": "education",
+      "aliases": [
+        "PM Scholarship for Armed Forces",
+        "PMSS for Police Personnel",
+        "Ex-servicemen scholarship"
+      ],
+      "description": "Provides scholarships to wards and widows of deceased/ex-servicemen of Armed Forces, Para-Military Forces, Railway Protection Force, and State Police personnel for professional/technical courses.",
+      "benefit_summary": "Rs 3,000 per month for boys, Rs 3,500 per month for girls pursuing professional/technical education",
+      "target_group": "Wards/widows of Armed Forces, Para-Military, Railway Protection, Police personnel",
+      "eligibility_scope": "professional_education_scholarship",
+      "jurisdiction": {
+        "country": "India",
+        "level": "central",
+        "states": [
+          "ALL"
+        ]
+      },
+      "eligibility_rules": [
+        {
+          "id": "pmss_eligible_ward",
+          "field": "is_ward_or_widow_of_eligible_personnel",
+          "operator": "eq",
+          "value": true,
+          "effect": "require",
+          "description": "Applicant must be ward/widow of ex-servicemen, deceased/disabled Armed Forces, Para-Military, RPF, or State Police personnel",
+          "pass_message": "Applicant is ward/widow of eligible personnel",
+          "fail_message": "PMSS is for wards/widows of specified defense and police personnel",
+          "question": "Is the applicant a ward or widow of ex-servicemen/Armed Forces/Para-Military/RPF/State Police personnel?"
+        },
+        {
+          "id": "pmss_marks",
+          "field": "class_12_percentage",
+          "operator": "gte",
+          "value": 60,
+          "effect": "require",
+          "description": "Minimum 60% marks in 12th standard/equivalent",
+          "pass_message": "Minimum marks requirement met",
+          "fail_message": "Minimum 60% marks required in 12th standard",
+          "question": "What percentage did the applicant score in 12th standard/equivalent?"
+        },
+        {
+          "id": "pmss_course_eligible",
+          "field": "is_professional_technical_course",
+          "operator": "eq",
+          "value": true,
+          "effect": "require",
+          "description": "Must be pursuing first professional degree in engineering, medical, dental, veterinary, MBA, MCA, etc. from AICTE/MCI/DCI/recognized institution",
+          "pass_message": "Course is eligible for scholarship",
+          "fail_message": "Only professional/technical courses from recognized institutions are eligible",
+          "question": "Is the applicant pursuing a professional degree (BE/BTech/MBBS/BDS/MBA/MCA) from a recognized institution?"
+        }
+      ],
+      "required_documents": [
+        "Ex-servicemen/personnel identity card or service certificate",
+        "12th mark sheet showing 60%+ marks",
+        "Admission proof in professional/technical course",
+        "Aadhaar card",
+        "Bank account details",
+        "Passport size photograph",
+        "Certificate of disability/death (if applicable)"
+      ],
+      "application_process": [
+        "Register on National Scholarship Portal (NSP) or KSB portal",
+        "Fill PMSS application form online",
+        "Upload required documents (service certificate, mark sheets, admission proof)",
+        "Submit application before deadline (usually October-November)",
+        "Verification by Kendriya Sainik Board/concerned department",
+        "Scholarship disbursed annually in two installments via DBT"
+      ],
+      "official_portal_url": "http://ksb.gov.in/",
+      "helpline": "011-26715250 (Kendriya Sainik Board)",
+      "source": "Ministry of Defence - Kendriya Sainik Board",
+      "source_url": "http://ksb.gov.in/",
+      "effective_date": "2006-07-01",
+      "last_verified": "2026-08-23",
+      "status": "active"
+    },
+    {
+      "id": "soil-health-card",
+      "name": "Soil Health Card Scheme",
+      "short_name": "SHC",
+      "category": "agriculture",
+      "aliases": [
+        "Soil testing scheme",
+        "Mitti Janchapatra",
+        "Soil card"
+      ],
+      "description": "Provides soil health cards to farmers every 2-3 years with crop-wise recommendations on nutrients and fertilizers required for individual farm holdings to improve productivity through judicious use of inputs.",
+      "benefit_summary": "Free soil testing and health card with customized fertilizer/nutrient recommendations for optimal crop yield",
+      "target_group": "All farmers with cultivable land",
+      "eligibility_scope": "farmer_with_land",
+      "jurisdiction": {
+        "country": "India",
+        "level": "central_with_state_implementation",
+        "states": [
+          "ALL"
+        ]
+      },
+      "eligibility_rules": [
+        {
+          "id": "shc_farmer",
+          "field": "is_farmer_with_cultivable_land",
+          "operator": "eq",
+          "value": true,
+          "effect": "require",
+          "description": "Applicant must be a farmer with cultivable agricultural land",
+          "pass_message": "Applicant is a farmer with cultivable land",
+          "fail_message": "SHC is for farmers with agricultural land",
+          "question": "Does the applicant own or cultivate agricultural land?"
+        }
+      ],
+      "required_documents": [
+        "Land records/ownership documents",
+        "Aadhaar card",
+        "Bank account details (for some states)",
+        "Contact details (mobile number)"
+      ],
+      "application_process": [
+        "Register at nearest Soil Testing Laboratory or Agriculture Department",
+        "Alternatively, register online on state agriculture portal",
+        "Soil samples collected by trained staff from your field",
+        "Samples tested at designated laboratories (12 macro/micro nutrients)",
+        "Soil Health Card issued with crop-wise fertilizer recommendations",
+        "Card valid for 2-3 years, renewable with fresh testing"
+      ],
+      "official_portal_url": "https://soilhealth.dac.gov.in/",
+      "helpline": "State agriculture department helplines",
+      "source": "Department of Agriculture & Farmers Welfare",
+      "source_url": "https://soilhealth.dac.gov.in/",
+      "effective_date": "2015-02-19",
+      "last_verified": "2026-08-23",
+      "status": "active"
+    },
+    {
+      "id": "pm-kmy",
+      "name": "Pradhan Mantri Kisan Maandhan Yojana",
+      "short_name": "PM-KMY",
+      "category": "pension",
+      "aliases": [
+        "PM Kisan Pension",
+        "Kisan Maandhan",
+        "Farmer pension scheme"
+      ],
+      "description": "Voluntary and contributory pension scheme for small and marginal farmers (landholding up to 2 hectares) aged 18-40 years, providing minimum pension of Rs 3,000 per month after age 60.",
+      "benefit_summary": "Assured monthly pension of Rs 3,000 after 60 years with age-based monthly contribution matched by Government",
+      "target_group": "Small and marginal farmers aged 18-40",
+      "eligibility_scope": "farmer_pension_enrollment",
+      "jurisdiction": {
+        "country": "India",
+        "level": "central",
+        "states": [
+          "ALL"
+        ]
+      },
+      "eligibility_rules": [
+        {
+          "id": "pmkmy_small_farmer",
+          "field": "cultivable_land_hectares",
+          "operator": "lte",
+          "value": 2,
+          "effect": "require",
+          "description": "Farmer must have cultivable land up to 2 hectares",
+          "pass_message": "Landholding is up to 2 hectares",
+          "fail_message": "PM-KMY is for small/marginal farmers with up to 2 hectares land",
+          "question": "What is the total cultivable landholding (in hectares)?"
+        },
+        {
+          "id": "pmkmy_age",
+          "field": "age",
+          "operator": "between_inclusive",
+          "value": [
+            18,
+            40
+          ],
+          "effect": "require",
+          "description": "Entry age between 18 and 40 years",
+          "pass_message": "Age is within 18-40 entry range",
+          "fail_message": "Entry age for PM-KMY is 18-40 years",
+          "question": "What is the applicant's age?"
+        },
+        {
+          "id": "pmkmy_exclusions",
+          "field": "falls_under_exclusion",
+          "operator": "eq",
+          "value": true,
+          "effect": "disqualify",
+          "description": "Should not be income tax payer, member of EPFO/ESIC/NPS, or high-income category",
+          "pass_message": "Does not fall under exclusion criteria",
+          "fail_message": "Income tax payers and EPFO/ESIC/NPS members are excluded",
+          "question": "Is the applicant an income tax payer or covered by EPFO/ESIC/NPS?"
+        }
+      ],
+      "required_documents": [
+        "Aadhaar card",
+        "Savings bank account passbook or Jan Dhan account",
+        "Land records showing landholding up to 2 hectares",
+        "Age proof",
+        "Mobile number for OTP verification"
+      ],
+      "application_process": [
+        "Visit nearest Common Service Centre (CSC) or use online portal",
+        "Provide Aadhaar and land records for verification",
+        "Choose pension start date and contribution amount",
+        "First contribution paid at enrollment",
+        "Auto-debit setup for monthly contributions from linked account",
+        "Pension starts after age 60 upon regular contributions"
+      ],
+      "official_portal_url": "https://maandhan.in/",
+      "helpline": "1800-3000-3468",
+      "source": "Ministry of Agriculture & Farmers Welfare",
+      "source_url": "https://maandhan.in/",
+      "effective_date": "2019-09-12",
+      "last_verified": "2026-08-23",
+      "status": "active"
+    },
+    {
+      "id": "mid-day-meal",
+      "name": "PM POSHAN (Mid-Day Meal Scheme)",
+      "short_name": "PM POSHAN",
+      "category": "education",
+      "aliases": [
+        "Mid-Day Meal",
+        "MDM",
+        "School meal programme",
+        "Samagra Shiksha nutrition"
+      ],
+      "description": "Provides cooked meals to children in government and government-aided schools from Class I to VIII, aiming to improve nutritional levels and encourage school attendance and retention.",
+      "benefit_summary": "Free nutritious cooked meal providing 450 calories and 12g protein (primary), 700 calories and 20g protein (upper primary) during school days",
+      "target_group": "Children studying in Classes I-VIII in government/aided schools",
+      "eligibility_scope": "school_enrollment",
+      "jurisdiction": {
+        "country": "India",
+        "level": "central_with_state_implementation",
+        "states": [
+          "ALL"
+        ]
+      },
+      "eligibility_rules": [
+        {
+          "id": "mdm_enrollment",
+          "field": "enrolled_in_govt_aided_school",
+          "operator": "eq",
+          "value": true,
+          "effect": "require",
+          "description": "Child must be enrolled in government or government-aided school (Classes I-VIII)",
+          "pass_message": "Child is enrolled in government/government-aided school",
+          "fail_message": "PM POSHAN covers government and government-aided schools only",
+          "question": "Is the child enrolled in a government or government-aided school (Classes I-VIII)?"
+        }
+      ],
+      "required_documents": [
+        "School enrollment proof (not required for access, automatic coverage for enrolled students)",
+        "Aadhaar (for attendance tracking in some states)"
+      ],
+      "application_process": [
+        "No separate application required",
+        "Automatic coverage for all children enrolled in government/government-aided schools Classes I-VIII",
+        "Meal provided during school days as per state menu",
+        "Parents can verify implementation through School Management Committees"
+      ],
+      "official_portal_url": "https://pmposhan.education.gov.in/",
+      "helpline": "State education department helplines",
+      "source": "Ministry of Education - Department of School Education & Literacy",
+      "source_url": "https://pmposhan.education.gov.in/",
+      "effective_date": "1995-08-15",
+      "last_verified": "2026-08-23",
+      "status": "active"
     }
   ]
 }
