@@ -1,0 +1,32 @@
+# Slim requirements for Render free tier
+# Only essentials for API to start and serve requests
+
+# Core Framework
+fastapi>=0.115.0
+uvicorn>=0.24.0
+python-dotenv>=1.0.0
+pydantic>=2.0.0
+email-validator>=2.0.0
+
+# HTTP clients (LLM API calls)
+httpx>=0.25.0
+
+# Voice (Sarvam AI SDK — lightweight HTTP wrapper)
+sarvamai>=0.1.27
+
+# Web requests
+requests>=2.31.0
+beautifulsoup4>=4.12.0
+
+# Browser Automation (OpenClaw) — all lazy-imported, graceful degradation
+# playwright>=1.40.0       # Heavy, enable only if browser filing needed
+# google-generativeai>=0.8.0  # Heavy, only used for CAPTCHA solving
+python-multipart
+
+# Database (PostgreSQL)
+sqlalchemy[asyncio]>=2.0.0
+asyncpg>=0.29.0
+alembic>=1.13.0  # Database migrations
+
+# Caching (Redis)
+redis[hiredis]>=5.0.0

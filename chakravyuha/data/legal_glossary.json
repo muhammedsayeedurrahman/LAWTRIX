@@ -1,0 +1,388 @@
+{
+  "metadata": {
+    "version": "1.0",
+    "description": "Legal glossary for plain language simplification",
+    "terms_count": 45,
+    "languages": ["en", "hi", "ta"]
+  },
+  "Acquittal": {
+    "simple": "When a court decides you are not guilty of the charges",
+    "legal": "A judgment rendered by a court that a defendant is not guilty of the charges brought against them",
+    "example": "After the trial concluded, the judge announced an acquittal for Mr. Singh",
+    "hindi": "बरी करना",
+    "tamil": "விடுவித்தல்",
+    "related": ["Not Guilty", "Discharge", "Judgment"]
+  },
+  "Advocate": {
+    "simple": "A lawyer who represents people in court",
+    "legal": "A member of the legal profession qualified to appear in court and represent clients in legal matters",
+    "example": "We hired an advocate to fight our case in the district court",
+    "hindi": "वकील",
+    "tamil": "வழக்கறிஞர்",
+    "related": ["Lawyer", "Attorney", "Counsel"]
+  },
+  "Bail": {
+    "simple": "Money paid to be released from jail while waiting for trial",
+    "legal": "A security deposit paid to the court to secure the temporary release of an accused person pending trial",
+    "example": "The judge set bail at ₹10,000, and we paid it to release him from custody",
+    "hindi": "जमानत",
+    "tamil": "பிணையம்",
+    "related": ["Custody", "Bailable", "Non-Bailable"]
+  },
+  "Bailable": {
+    "simple": "A crime where the accused can be released by paying money (bail) until trial",
+    "legal": "An offense in which the accused has the right to be released on bail as a matter of right",
+    "example": "Theft is a bailable offense, so he was granted bail of ₹25,000",
+    "hindi": "जमानती अपराध",
+    "tamil": "பிணைய குற்றம்",
+    "related": ["Non-Bailable", "Bail", "Custody"]
+  },
+  "Case": {
+    "simple": "A legal matter that is taken to court",
+    "legal": "A legal dispute or criminal matter formally brought before a court of law for adjudication",
+    "example": "The case against the accused will be heard next month in court",
+    "hindi": "मुकदमा",
+    "tamil": "வழக்கு",
+    "related": ["Court", "Judge", "Trial"]
+  },
+  "Cognizable": {
+    "simple": "A crime serious enough that police can arrest without permission",
+    "legal": "An offense in which police have the power to search, seize, and arrest without warrant",
+    "example": "Murder is a cognizable offense, so police arrested the suspect immediately",
+    "hindi": "संज्ञेय",
+    "tamil": "அறிய விக்கிரமம்",
+    "related": ["Non-Cognizable", "Warrant", "Arrest"]
+  },
+  "Complaint": {
+    "simple": "A formal written statement of a wrong or injury to the police or court",
+    "legal": "A formal allegation or accusation made to the police or court regarding a crime or civil matter",
+    "example": "I filed a complaint with the police about the theft",
+    "hindi": "शिकायत",
+    "tamil": "புகார்",
+    "related": ["FIR", "Grievance", "Petition"]
+  },
+  "Conviction": {
+    "simple": "When a court finds someone guilty after trial",
+    "legal": "A judgment of a court that a defendant is guilty of a crime as charged",
+    "example": "The conviction resulted in a 5-year prison sentence",
+    "hindi": "दोषसिद्धि",
+    "tamil": "குற்றவாளி நிலை",
+    "related": ["Guilty", "Acquittal", "Judgment"]
+  },
+  "Cross-Examination": {
+    "simple": "When the other side's lawyer questions your witness to check if they're telling the truth",
+    "legal": "The questioning of a witness by the opposing counsel during trial to test credibility and contradiction",
+    "example": "During cross-examination, the defense lawyer challenged the witness's testimony",
+    "hindi": "जिरह",
+    "tamil": "எதிர்ப்பு பரীक்षை",
+    "related": ["Examination-in-chief", "Evidence", "Witness"]
+  },
+  "Discharge": {
+    "simple": "When a court decides there is not enough evidence to continue the case",
+    "legal": "An order by the court to dismiss the charges against an accused when no prima facie case is established",
+    "example": "The judge ordered discharge of the accused in the mistaken identity case",
+    "hindi": "मुक्त करना",
+    "tamil": "விலக்குதல்",
+    "related": ["Acquittal", "Not Guilty"]
+  },
+  "Evidence": {
+    "simple": "Facts or information that help prove what happened",
+    "legal": "Any matter, whether oral, documentary, or material, admissible in court to prove a fact in issue",
+    "example": "The CCTV footage is credible evidence of who committed the theft",
+    "hindi": "सबूत",
+    "tamil": "ஆதாரம்",
+    "related": ["Proof", "Testimony", "Document"]
+  },
+  "FIR": {
+    "simple": "A written report made to police when a crime is committed",
+    "legal": "First Information Report - a detailed account of a crime filed with the police to initiate investigation",
+    "example": "I went to the police station and filed an FIR for the robbery",
+    "hindi": "प्रथम सूचना रिपोर्ट",
+    "tamil": "முதல் தகவல் அறிக்கை",
+    "related": ["Police Complaint", "Criminal Complaint", "Investigation"]
+  },
+  "Grievance": {
+    "simple": "A formal complaint about something that is wrong or unfair",
+    "legal": "A formal statement expressing dissatisfaction regarding a breach of law or unfair treatment",
+    "example": "I filed a grievance against the police for harassing my family",
+    "hindi": "शिकायत",
+    "tamil": "குறைதீர்க்கல்",
+    "related": ["Complaint", "Petition", "Appeal"]
+  },
+  "Guilty": {
+    "simple": "When someone is found to have done the crime they were accused of",
+    "legal": "Having been found by a court to have committed the offense charged",
+    "example": "The jury decided that the defendant was guilty beyond reasonable doubt",
+    "hindi": "दोषी",
+    "tamil": "குற்றவாளி",
+    "related": ["Conviction", "Not Guilty", "Innocent"]
+  },
+  "Hearing": {
+    "simple": "When the judge listens to both sides argue their case in court",
+    "legal": "A formal court session where arguments and evidence are presented before a judge",
+    "example": "The hearing is scheduled for next Tuesday at 2 PM in the district court",
+    "hindi": "सुनवाई",
+    "tamil": "கேட்பு",
+    "related": ["Trial", "Court", "Judge"]
+  },
+  "Injunction": {
+    "simple": "A court order stopping someone from doing something or making them do it",
+    "legal": "A court order prohibiting a person from taking a specific action or requiring them to take action",
+    "example": "The court issued an injunction stopping the factory from polluting the river",
+    "hindi": "निषेधाज्ञा",
+    "tamil": "தடை உத்தரவு",
+    "related": ["Court Order", "Restraining Order"]
+  },
+  "Jurisdiction": {
+    "simple": "The authority of a court to hear and decide a case",
+    "legal": "The power and authority of a court to hear a case and make decisions within its territorial limits",
+    "example": "The district court has jurisdiction over this case because the crime occurred in this district",
+    "hindi": "क्षेत्राधिकार",
+    "tamil": "அதிகாரப் பகுதி",
+    "related": ["Court", "Appeal", "Venue"]
+  },
+  "Liability": {
+    "simple": "Legal responsibility for something, such as paying damages",
+    "legal": "Legal obligation or responsibility to pay damages or fulfill a duty imposed by law",
+    "example": "The company was held liable for the injury caused by their faulty product",
+    "hindi": "दायित्व",
+    "tamil": "பொறுப்பு",
+    "related": ["Damages", "Negligence"]
+  },
+  "Mediation": {
+    "simple": "When a neutral third person helps two sides reach agreement without court",
+    "legal": "A dispute resolution process where parties attempt resolution with assistance of a neutral mediator",
+    "example": "The mediation helped settle the dispute between the two neighbors",
+    "hindi": "मध्यस्थता",
+    "tamil": "இடைமுறையாக்கல்",
+    "related": ["Settlement", "Arbitration", "ADR"]
+  },
+  "Negligence": {
+    "simple": "Failure to take care, resulting in harm to someone",
+    "legal": "The failure to exercise reasonable care resulting in damage or injury to another party",
+    "example": "The doctor's negligence during surgery caused permanent damage to the patient",
+    "hindi": "लापरवाही",
+    "tamil": "அலட்சியம்",
+    "related": ["Liability", "Damages"]
+  },
+  "Not Guilty": {
+    "simple": "When a court decides you did not commit the crime",
+    "legal": "A verdict where the accused is found to have not committed the offense(s) charged",
+    "example": "The jury returned a verdict of not guilty, and the defendant was acquitted",
+    "hindi": "निर्दोष",
+    "tamil": "குற்றவாளி அல்ல",
+    "related": ["Acquittal", "Innocent", "Guilty"]
+  },
+  "Petition": {
+    "simple": "A formal written request to the court for help or action",
+    "legal": "A formal document submitted to court requesting relief or action under law",
+    "example": "We filed a petition in the high court challenging the government order",
+    "hindi": "याचिका",
+    "tamil": "மனு",
+    "related": ["Application", "Motion", "Writ"]
+  },
+  "Plea": {
+    "simple": "A statement in court saying whether the accused admits or denies the crime",
+    "legal": "A defendant's statement before the court admitting or denying the charges",
+    "example": "The accused entered a guilty plea at the district court",
+    "hindi": "दलील",
+    "tamil": "மனு",
+    "related": ["Guilty", "Not Guilty"]
+  },
+  "Precedent": {
+    "simple": "An earlier court decision that influences how similar cases are decided",
+    "legal": "A legal principle or rule established by a previous court decision and followed in similar cases",
+    "example": "The higher court's precedent set the standard for all lower courts in this matter",
+    "hindi": "पूर्वोदाहरण",
+    "tamil": "முன்பற்றி",
+    "related": ["Judgment", "Court Decision"]
+  },
+  "Proof": {
+    "simple": "Facts or evidence that show something is true",
+    "legal": "Evidence or information sufficient to establish a fact to the required standard of proof",
+    "example": "The prosecution provided proof of the defendant's guilt beyond reasonable doubt",
+    "hindi": "साक्ष्य",
+    "tamil": "ஆதாரம்",
+    "related": ["Evidence", "Document"]
+  },
+  "Sentence": {
+    "simple": "The punishment given by a judge after someone is found guilty",
+    "legal": "The punishment imposed by a court after conviction of an offense",
+    "example": "The judge sentenced him to 7 years in prison for the crime",
+    "hindi": "सजा",
+    "tamil": "தண்டனை",
+    "related": ["Conviction", "Punishment", "Imprisonment"]
+  },
+  "Settlement": {
+    "simple": "When both sides agree to end the case without going to trial",
+    "legal": "An agreement between parties to resolve a dispute without continuing judicial proceedings",
+    "example": "The parties reached a settlement of ₹ 5 lakhs to end the dispute",
+    "hindi": "समझौता",
+    "tamil": "தீர்வு",
+    "related": ["Mediation", "Compromise", "Arbitration"]
+  },
+  "Statute": {
+    "simple": "A law passed by the government",
+    "legal": "A formal written enactment of the legislative body prescribing rules and regulations",
+    "example": "The Bharatiya Nyaya Sanhita (BNS) is a statute that defines crimes and punishments",
+    "hindi": "विधि",
+    "tamil": "சட்டம்",
+    "related": ["Law", "Legislation", "Act"]
+  },
+  "Subpoena": {
+    "simple": "A court order making someone appear in court to give evidence",
+    "legal": "A writ commanding a person to attend court and give testimony or produce evidence",
+    "example": "The witness received a subpoena requiring her to appear in court",
+    "hindi": "समन",
+    "tamil": "வழங்கல්",
+    "related": ["Summons", "Court Order"]
+  },
+  "Testimony": {
+    "simple": "What a witness says under oath in court",
+    "legal": "Evidence given by a witness, usually under oath, before a court",
+    "example": "The victim's testimony was crucial in convicting the defendant",
+    "hindi": "गवाही",
+    "tamil": "சாட்சியம்",
+    "related": ["Evidence", "Witness", "Oath"]
+  },
+  "Trial": {
+    "simple": "When a court hears all the evidence and decides if someone is guilty or not guilty",
+    "legal": "A formal proceeding before a court in which evidence is presented to determine guilt or innocence",
+    "example": "The trial lasted three weeks before the jury gave their verdict",
+    "hindi": "मुकदमा/विचारण",
+    "tamil": "விசாரணை",
+    "related": ["Court", "Judge", "Verdict"]
+  },
+  "Verdict": {
+    "simple": "The decision a court makes about whether someone is guilty or not guilty",
+    "legal": "A finding or decision by a court or jury regarding guilt or innocence based on evidence",
+    "example": "The jury returned a verdict of guilty after deliberating for two hours",
+    "hindi": "फैसला",
+    "tamil": "தீர்ப்பு",
+    "related": ["Judgment", "Decision", "Guilty", "Not Guilty"]
+  },
+  "Warrant": {
+    "simple": "A court order giving police permission to arrest someone or search property",
+    "legal": "A written order issued by a judge authorizing law enforcement to arrest or search",
+    "example": "The judge issued an arrest warrant for the suspect",
+    "hindi": "वारंट",
+    "tamil": "உத்தரவு",
+    "related": ["Arrest", "Search", "Court Order"]
+  },
+  "Witness": {
+    "simple": "A person who saw or knows something about what happened",
+    "legal": "A person who has personal knowledge of facts and gives evidence in court or deposition",
+    "example": "The shop owner was the main witness to the robbery",
+    "hindi": "गवाह",
+    "tamil": "சாட்சி",
+    "related": ["Testimony", "Evidence", "Credibility"]
+  },
+  "Writ": {
+    "simple": "A written court order commanding someone to do or not do something",
+    "legal": "A formal written order issued by a court commanding a specific action or remedy",
+    "example": "The high court issued a writ of habeas corpus on behalf of the detained person",
+    "hindi": "रिट",
+    "tamil": "பட்டயம்",
+    "related": ["Habeas Corpus", "Injunction", "Court Order"]
+  },
+  "Public Information Officer": {
+    "simple": "The officer designated by a public authority to receive and answer RTI requests",
+    "legal": "A Central or State Public Information Officer designated under the Right to Information Act, 2005",
+    "example": "An RTI application is addressed to the Public Information Officer of the public authority that holds the records.",
+    "hindi": "",
+    "tamil": "",
+    "related": ["RTI Application", "Public Authority", "First Appeal"],
+    "source": "Right to Information Act, 2005",
+    "source_url": "https://www.indiacode.nic.in/bitstream/123456789/15691/1/rti_act_2005.pdf"
+  },
+  "Public Authority": {
+    "simple": "A government-connected body covered by the RTI Act that may hold public records",
+    "legal": "A body or authority falling within the definition in section 2(h) of the Right to Information Act, 2005",
+    "example": "The correct public authority is the one that holds or controls the record being requested.",
+    "hindi": "",
+    "tamil": "",
+    "related": ["Public Information Officer", "RTI Application"],
+    "source": "Right to Information Act, 2005",
+    "source_url": "https://www.indiacode.nic.in/bitstream/123456789/15691/1/rti_act_2005.pdf"
+  },
+  "First Appeal": {
+    "simple": "The first formal challenge to an RTI decision or lack of response, made to the designated appellate authority",
+    "legal": "An appeal under section 19(1) of the Right to Information Act, 2005",
+    "example": "The applicant checked the Act and official guidance before preparing a first appeal.",
+    "hindi": "",
+    "tamil": "",
+    "related": ["RTI Application", "Public Information Officer"],
+    "source": "Right to Information Act, 2005",
+    "source_url": "https://www.indiacode.nic.in/bitstream/123456789/15691/1/rti_act_2005.pdf"
+  },
+  "Deficiency": {
+    "simple": "A legally relevant shortcoming in the quality or manner of a service, assessed under the Consumer Protection Act",
+    "legal": "The meaning assigned to deficiency by section 2(11) of the Consumer Protection Act, 2019",
+    "example": "A delayed or poor service is not automatically a proven deficiency; the facts and statutory definition must be checked.",
+    "hindi": "",
+    "tamil": "",
+    "related": ["Consumer", "Service", "Unfair Trade Practice"],
+    "source": "Consumer Protection Act, 2019",
+    "source_url": "https://www.indiacode.nic.in/bitstream/123456789/12808/1/the_consumer_protection_act%2C_2019_no._35_of_2019_date_09.08.2019.pdf"
+  },
+  "Unfair Trade Practice": {
+    "simple": "A trade practice that may be treated as unfair under the Consumer Protection Act's detailed definition",
+    "legal": "The meaning assigned to unfair trade practice by section 2(47) of the Consumer Protection Act, 2019",
+    "example": "Keep the advertisement and transaction record when an unfair representation is alleged.",
+    "hindi": "",
+    "tamil": "",
+    "related": ["Consumer", "Deficiency", "Misrepresentation"],
+    "source": "Consumer Protection Act, 2019",
+    "source_url": "https://www.indiacode.nic.in/bitstream/123456789/12808/1/the_consumer_protection_act%2C_2019_no._35_of_2019_date_09.08.2019.pdf"
+  },
+  "Lessor": {
+    "simple": "The person who grants a lease",
+    "legal": "The transferor in a lease of immovable property under the Transfer of Property Act, 1882",
+    "example": "The rent agreement identifies the lessor and lessee.",
+    "hindi": "",
+    "tamil": "",
+    "related": ["Lessee", "Lease", "Tenant"],
+    "source": "Transfer of Property Act, 1882",
+    "source_url": "https://www.indiacode.nic.in/bitstream/123456789/2338/1/A1882-04.pdf"
+  },
+  "Lessee": {
+    "simple": "The person to whom a lease is granted",
+    "legal": "The transferee in a lease of immovable property under the Transfer of Property Act, 1882",
+    "example": "Local rent law may also govern the lessee's rights and duties.",
+    "hindi": "",
+    "tamil": "",
+    "related": ["Lessor", "Lease", "Tenant"],
+    "source": "Transfer of Property Act, 1882",
+    "source_url": "https://www.indiacode.nic.in/bitstream/123456789/2338/1/A1882-04.pdf"
+  },
+  "Retrenchment": {
+    "simple": "A statutory job-termination concept whose coverage and exclusions must be checked under current industrial-relations law",
+    "legal": "The meaning assigned to retrenchment by the Industrial Relations Code, 2020",
+    "example": "A person should not assume every termination is retrenchment without checking status, facts, rules and exclusions.",
+    "hindi": "",
+    "tamil": "",
+    "related": ["Lay-off", "Industrial Dispute", "Termination"],
+    "source": "Industrial Relations Code, 2020",
+    "source_url": "https://www.indiacode.nic.in/bitstream/123456789/22040/1/A2020-35.pdf"
+  },
+  "Lay-off": {
+    "simple": "A statutory employment concept for an employer's inability or failure to provide work in covered circumstances",
+    "legal": "The meaning assigned to lay-off by the Industrial Relations Code, 2020",
+    "example": "Coverage, worker status and the reason work was unavailable must be verified.",
+    "hindi": "",
+    "tamil": "",
+    "related": ["Retrenchment", "Industrial Dispute", "Wages"],
+    "source": "Industrial Relations Code, 2020",
+    "source_url": "https://www.indiacode.nic.in/bitstream/123456789/22040/1/A2020-35.pdf"
+  },
+  "Internal Committee": {
+    "simple": "A workplace committee established for prevention and redressal of sexual-harassment complaints where the POSH Act requires it",
+    "legal": "An Internal Committee constituted under section 4 of the Sexual Harassment of Women at Workplace Act, 2013",
+    "example": "Check the employer's official policy and committee details before submitting sensitive information.",
+    "hindi": "",
+    "tamil": "",
+    "related": ["Workplace", "Sexual Harassment", "Local Committee"],
+    "source": "Sexual Harassment of Women at Workplace Act, 2013",
+    "source_url": "https://www.indiacode.nic.in/handle/123456789/2104?locale=en"
+  }
+}
