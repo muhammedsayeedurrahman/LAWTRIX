@@ -2,10 +2,11 @@
 
 import { useState, useRef, useEffect, useCallback, useId } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { smartQuery, type SmartResponse } from "@/services/api";
+import { smartQuery, smartVoice, type SmartResponse } from "@/services/api";
 import { useApp } from "@/context/AppContext";
 import { Logo } from "@/components/Logo";
 import { ChatHandoffTransition } from "@/components/ChatHandoffTransition";
+import { useAudioRecorder } from "@/hooks/useAudioRecorder";
 import {
   civicJourneyForResponse,
   createCivicWorkflowLaunch,
@@ -14,25 +15,24 @@ import {
   type CivicWorkflowLaunch,
 } from "@/lib/civicWorkflowHandoff";
 
-// ── Civic-first quick chips ────────────────────────────────────────────────────
+// ── Citizen-first situation chips ────────────────────────────────────────────
 
 const QUICK_CHIPS = [
-  { label: "Road not repaired",     text: "My municipal road has not been repaired for a long time." },
-  { label: "Government records",    text: "I want copies of government records under RTI." },
+  { label: "Road complaint",       text: "My municipal road has not been repaired." },
+  { label: "Government records",    text: "I want copies of records showing how much was spent repairing this road." },
   { label: "Landlord deposit",      text: "My landlord won't return my security deposit." },
-  { label: "Unpaid salary",         text: "My employer hasn't paid my salary for months." },
-  { label: "Consumer complaint",    text: "I have a consumer complaint about a defective product." },
-  { label: "Find schemes",          text: "I want to find government schemes I may be eligible for." },
-  { label: "I need help",           text: "I'm not sure what my problem is called. Can you help me?" },
+  { label: "Unpaid salary",         text: "My employer hasn't paid my salary." },
+  { label: "Consumer complaint",    text: "I bought a defective product and the seller refuses a refund." },
+  { label: "Find schemes",          text: "I want to find government schemes I may qualify for." },
 ];
 
-// Low-confidence civic suggestions — no crime categories
 const LOW_CONFIDENCE_CHIPS = [
-  { label: "I want government records",    text: "I want copies of government records under RTI." },
-  { label: "My complaint was ignored",     text: "I filed a complaint but nothing happened. I want to escalate." },
-  { label: "Landlord issue",               text: "My landlord is causing a problem and refusing to help." },
-  { label: "My employer isn't paying",     text: "My employer hasn't paid my salary or provident fund." },
-  { label: "Find schemes for me",          text: "I am looking for government welfare schemes I can apply for." },
+  { label: "Road not repaired",          text: "My municipal road has not been repaired." },
+  { label: "Government records (RTI)",   text: "I want copies of government spending records." },
+  { label: "Landlord won't return deposit", text: "My landlord won't return my security deposit." },
+  { label: "Employer hasn't paid salary", text: "My employer hasn't paid my salary." },
+  { label: "Defective product refund",    text: "I bought a defective item and was denied a refund." },
+  { label: "Government welfare schemes",  text: "I want to find government welfare schemes I qualify for." },
 ];
 
 const LANG_LABELS: Record<string, string> = {
@@ -59,12 +59,14 @@ interface ChatMessage {
   smartData?: SmartResponse;
   requestNarrative?: string;
   isError?: boolean;
+  isLowConfidence?: boolean;
 }
 
 interface ChatModalProps {
   open: boolean;
   /** Optional pre-filled text to seed the first message */
   initialText?: string;
+  autoSend?: boolean;
   onClose: () => void;
   onOpenCivic?: (launch: CivicWorkflowLaunch) => void;
 }
@@ -83,13 +85,29 @@ const SEVERITY: Record<string, { bg: string; text: string; label: string }> = {
   low:      { bg: "rgba(167,139,250,0.2)", text: "#a78bfa", label: "LOW" },
 };
 
-function needsCategoryPicker(data: SmartResponse | undefined): boolean {
+function isGenericOrLowConfidence(data: SmartResponse | undefined, text: string): boolean {
+  const t = text.trim().toLowerCase();
+  if (
+    t === "can you help me?" ||
+    t === "can you help me" ||
+    t === "help" ||
+    t === "help me" ||
+    t === "hello" ||
+    t === "hi" ||
+    t.length < 5
+  ) {
+    return true;
+  }
   return Boolean(
-    data && !civicJourneyForResponse(data) && (data.scenario === "unknown" || !data.guidance)
+    data &&
+      !civicJourneyForResponse(data) &&
+      (data.scenario === "unknown" ||
+        !data.guidance ||
+        (typeof data.routing_confidence === "number" && data.routing_confidence < 0.6))
   );
 }
 
-// ── Low-confidence picker (civic-first) ─────────────────────────────────────
+// ── Low-confidence welcoming picker (civic-first) ───────────────────────────
 
 function LowConfidencePicker({
   onSelect,
@@ -101,34 +119,40 @@ function LowConfidencePicker({
   return (
     <div
       className="rounded-2xl p-4 flex flex-col gap-3 text-sm"
-      style={{ background: "rgba(0,0,0,0.2)", border: "1px solid var(--color-border)" }}
+      style={{
+        background: "rgba(10, 10, 26, 0.7)",
+        border: "1px solid var(--color-border-bright)",
+      }}
       role="group"
-      aria-label="Clarify your situation"
+      aria-label="Clarify what happened"
     >
-      <p style={{ color: "var(--color-text-muted)" }}>
-        Let me understand better. What&apos;s happening?
-      </p>
-      <div className="flex flex-wrap gap-2">
+      <div className="flex flex-col gap-1">
+        <p className="font-bold text-sm" style={{ color: "var(--color-text)" }}>
+          Absolutely. Tell us what happened or what you need.
+        </p>
+        <p className="text-xs" style={{ color: "var(--color-text-muted)" }}>
+          Select a common situation below, or describe your situation in your own words:
+        </p>
+      </div>
+
+      <div className="flex flex-wrap gap-2 pt-1">
         {LOW_CONFIDENCE_CHIPS.map((chip) => (
           <button
             key={chip.label}
             onClick={() => onSelect(chip.text)}
             disabled={disabled}
-            className="px-3 py-1.5 rounded-full text-xs font-medium transition-colors disabled:opacity-40"
+            className="px-3 py-1.5 rounded-xl text-xs font-semibold transition-all disabled:opacity-40 hover:scale-[1.02] active:scale-[0.98]"
             style={{
               background: "var(--color-primary-dim)",
               color: "var(--color-primary)",
               border: "1px solid rgba(167,139,250,0.3)",
             }}
-            aria-label={`Select: ${chip.label}`}
+            aria-label={`Select situation: ${chip.label}`}
           >
             {chip.label}
           </button>
         ))}
       </div>
-      <p className="text-[10px]" style={{ color: "var(--color-text-faint)" }}>
-        Or describe your situation in the box below in your own words.
-      </p>
     </div>
   );
 }
@@ -152,12 +176,15 @@ function ResponseCard({
 
   return (
     <div
-      className="rounded-2xl p-3.5 flex flex-col gap-3 text-xs"
-      style={{ background: "rgba(0,0,0,0.22)", border: "1px solid var(--color-border)" }}
+      className="rounded-2xl p-4 flex flex-col gap-3 text-xs"
+      style={{
+        background: "rgba(10, 10, 26, 0.75)",
+        border: "1px solid var(--color-border-bright)",
+      }}
     >
       {/* Title + severity */}
       <div className="flex items-start justify-between gap-2">
-        <span className="font-semibold text-sm leading-snug" style={{ color: "var(--color-primary)" }}>
+        <span className="font-bold text-sm leading-snug" style={{ color: "var(--color-primary)" }}>
           {data.title}
         </span>
         <span
@@ -171,65 +198,36 @@ function ResponseCard({
 
       {/* Guidance */}
       {data.guidance && (
-        <div className="whitespace-pre-line leading-relaxed" style={{ color: "var(--color-text)" }}>
+        <div className="whitespace-pre-line leading-relaxed text-sm" style={{ color: "var(--color-text)" }}>
           {data.guidance}
         </div>
       )}
 
-      {/* Applicable legal sections */}
-      {data.sections.length > 0 && (
-        <div className="flex flex-col gap-1">
-          <span
-            className="font-semibold uppercase tracking-wider text-[9px]"
-            style={{ color: "var(--color-secondary)" }}
-          >
-            Applicable sections
-          </span>
-          <div className="flex flex-wrap gap-1" role="list">
-            {data.sections.map((s, i) => (
-              <span
-                key={i}
-                role="listitem"
-                className="px-2 py-0.5 rounded-full text-[10px]"
-                style={{
-                  background: "var(--color-secondary-dim)",
-                  color: "var(--color-secondary)",
-                  border: "1px solid rgba(232,180,184,0.2)",
-                }}
-              >
-                {s}
-              </span>
-            ))}
-          </div>
-        </div>
-      )}
-
-      {/* Likely outcome */}
+      {/* Likely outcome / Next step */}
       {data.outcome && (
         <div
-          className="rounded-xl px-3 py-2"
-          style={{ background: "var(--color-primary-dim)", border: "1px solid rgba(167,139,250,0.15)" }}
+          className="rounded-xl p-3"
+          style={{ background: "var(--color-primary-dim)", border: "1px solid rgba(167,139,250,0.2)" }}
         >
-          <span className="font-semibold" style={{ color: "var(--color-primary)" }}>Likely next step: </span>
-          <span style={{ color: "var(--color-text)" }}>{data.outcome}</span>
+          <span className="font-bold text-xs" style={{ color: "var(--color-primary)" }}>Next Step: </span>
+          <span className="text-xs" style={{ color: "var(--color-text)" }}>{data.outcome}</span>
         </div>
       )}
 
-      {/* Civic workflow CTA */}
+      {/* Direct Civic workflow launch CTA */}
       {manualLaunch && onOpenCivic && (
         <button
           type="button"
           onClick={() => onOpenCivic(manualLaunch)}
-          className="w-full rounded-xl px-3 py-2.5 text-sm font-semibold transition-all
-                     hover:scale-[1.01] active:scale-[0.99] focus-visible:outline-none focus-visible:ring-2"
+          className="w-full rounded-xl px-4 py-2.5 text-xs font-bold transition-all hover:scale-[1.01] active:scale-[0.99] focus-visible:outline-none focus-visible:ring-2 flex items-center justify-center gap-1.5"
           style={{
-            background: "var(--color-primary-dim)",
-            color: "var(--color-primary)",
-            border: "1px solid var(--color-primary)",
+            background: "linear-gradient(135deg, var(--color-primary), #818cf8)",
+            color: "#0a0a1a",
           }}
           aria-label={`Continue to ${CIVIC_JOURNEY_LABELS[manualLaunch.journey]}`}
         >
-          Continue to {CIVIC_JOURNEY_LABELS[manualLaunch.journey]} →
+          <span>Continue to {CIVIC_JOURNEY_LABELS[manualLaunch.journey]}</span>
+          <span aria-hidden="true">→</span>
         </button>
       )}
 
@@ -246,7 +244,7 @@ function ResponseCard({
               border: "1px solid rgba(129,140,248,0.2)",
             }}
           >
-            {showDraft ? "Hide draft ▲" : "View draft document ▼"}
+            {showDraft ? "Hide draft document ▲" : "View draft document ▼"}
           </button>
           <AnimatePresence>
             {showDraft && (
@@ -254,8 +252,12 @@ function ResponseCard({
                 initial={{ height: 0, opacity: 0 }}
                 animate={{ height: "auto", opacity: 1 }}
                 exit={{ height: 0, opacity: 0 }}
-                className="mt-2 whitespace-pre-wrap text-[11px] leading-relaxed rounded-xl p-2.5 overflow-hidden"
-                style={{ background: "rgba(0,0,0,0.28)", color: "var(--color-text)", border: "1px solid var(--color-border)" }}
+                className="mt-2 whitespace-pre-wrap text-[11px] leading-relaxed rounded-xl p-3 overflow-hidden"
+                style={{
+                  background: "rgba(0,0,0,0.35)",
+                  color: "var(--color-text)",
+                  border: "1px solid var(--color-border)",
+                }}
               >
                 {data.complaint_draft}
               </motion.pre>
@@ -270,59 +272,28 @@ function ResponseCard({
         return num ? (
           <a
             href={`tel:${num}`}
-            className="flex items-center justify-center gap-2 py-2.5 rounded-xl text-sm font-bold tracking-wide"
+            className="flex items-center justify-center gap-2 py-2.5 rounded-xl text-xs font-bold tracking-wide"
             style={{
               background: "rgba(239,68,68,0.2)",
               color: "#ef4444",
               border: "2px solid rgba(239,68,68,0.45)",
-              animation: "sos-pulse 2s ease-in-out infinite",
             }}
             aria-label={`Emergency: Call ${data.helplines[0]}`}
           >
-            <span aria-hidden>📞</span> Call {data.helplines[0]}
+            <span aria-hidden="true">📞</span> Call {data.helplines[0]}
           </a>
         ) : null;
       })()}
 
-      {/* All helplines */}
-      {data.helplines.length > 0 && (
-        <div className="flex flex-wrap gap-1.5" role="list" aria-label="Helplines">
-          {data.helplines.map((h, i) => {
-            const num = parseHelplineNumber(h);
-            return num ? (
-              <a
-                key={i}
-                href={`tel:${num}`}
-                role="listitem"
-                className="px-2 py-0.5 rounded-full text-[10px] font-bold inline-flex items-center gap-1"
-                style={{ background: "rgba(239,68,68,0.12)", color: "#ef4444", border: "1px solid rgba(239,68,68,0.2)" }}
-                aria-label={`Call helpline ${h}`}
-              >
-                📞 {h}
-              </a>
-            ) : (
-              <span
-                key={i}
-                role="listitem"
-                className="px-2 py-0.5 rounded-full text-[10px] font-bold"
-                style={{ background: "rgba(239,68,68,0.12)", color: "#ef4444", border: "1px solid rgba(239,68,68,0.2)" }}
-              >
-                {h}
-              </span>
-            );
-          })}
-        </div>
-      )}
-
-      {/* Language + source (lightweight trust) */}
-      <div className="flex items-center justify-between text-[9px]" style={{ color: "var(--color-text-faint)" }}>
+      {/* Language badge */}
+      <div className="flex items-center justify-between text-[9px] pt-1" style={{ color: "var(--color-text-faint)" }}>
         {data.response_language && data.response_language !== "en-IN" ? (
           <span>
             Responded in {LANG_LABELS[data.response_language] || data.response_language}
           </span>
         ) : <span />}
-        <span className="uppercase tracking-widest">
-          {data.source === "classifier" ? "Official classification" : "AI-assisted guidance"}
+        <span className="uppercase tracking-widest font-semibold">
+          {data.source === "intent_router" ? "Action Pathway" : "Civic Assistance"}
         </span>
       </div>
     </div>
@@ -335,7 +306,7 @@ function ErrorBubble({ onRetry }: { onRetry: () => void }) {
   return (
     <div
       className="rounded-2xl rounded-bl-sm px-4 py-3 flex flex-col gap-2 text-sm max-w-[90%] self-start"
-      style={{ background: "rgba(239,68,68,0.08)", border: "1px solid rgba(239,68,68,0.2)" }}
+      style={{ background: "rgba(239,68,68,0.08)", border: "1px solid rgba(239,68,68,0.25)" }}
       role="alert"
     >
       <p style={{ color: "#ef4444" }}>We can&apos;t reach the service right now.</p>
@@ -352,17 +323,28 @@ function ErrorBubble({ onRetry }: { onRetry: () => void }) {
 
 // ── Main ChatModal ───────────────────────────────────────────────────────────
 
-export function ChatModal({ open, initialText, onClose, onOpenCivic }: ChatModalProps) {
+export function ChatModal({ open, initialText, autoSend, onClose, onOpenCivic }: ChatModalProps) {
   const { state } = useApp();
   const [messages, setMessages] = useState<ChatMessage[]>([]);
   const [input, setInput] = useState(initialText ?? "");
   const [isLoading, setIsLoading] = useState(false);
   const [lastUserText, setLastUserText] = useState("");
   const [pendingHandoff, setPendingHandoff] = useState<CivicWorkflowLaunch | null>(null);
+
   const endRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
   const panelRef = useRef<HTMLDivElement>(null);
   const statusId = useId();
+
+  // Voice recording inside chat
+  const {
+    recorderState,
+    audioBlob,
+    startRecording,
+    stopRecording,
+    clearRecording,
+  } = useAudioRecorder();
+  const isRecording = recorderState === "recording";
 
   // Scroll to bottom on new message
   useEffect(() => {
@@ -376,19 +358,11 @@ export function ChatModal({ open, initialText, onClose, onOpenCivic }: ChatModal
     }
   }, [open]);
 
-  // Pre-fill text from props when modal opens
-  useEffect(() => {
-    if (open && initialText) {
-      setInput(initialText);
-    }
-  }, [open, initialText]);
-
   // Focus trap — Escape closes modal
   useEffect(() => {
     if (!open) return;
     const handler = (e: KeyboardEvent) => {
       if (e.key === "Escape") {
-        // If handoff pending, cancel it
         if (pendingHandoff) {
           setPendingHandoff(null);
           return;
@@ -410,18 +384,44 @@ export function ChatModal({ open, initialText, onClose, onOpenCivic }: ChatModal
       setInput("");
       setIsLoading(true);
 
+      // Check for low-confidence / generic query immediately
+      const isGeneric =
+        trimmed.toLowerCase() === "can you help me?" ||
+        trimmed.toLowerCase() === "can you help me" ||
+        trimmed.toLowerCase() === "help" ||
+        trimmed.toLowerCase() === "help me";
+
+      if (isGeneric) {
+        setIsLoading(false);
+        setMessages((prev) => [
+          ...prev,
+          {
+            role: "ai",
+            text: "",
+            isLowConfidence: true,
+            requestNarrative: trimmed,
+          },
+        ]);
+        return;
+      }
+
       try {
         const res = await smartQuery(trimmed, state.language.code);
 
         setMessages((prev) => [
           ...prev,
-          { role: "ai", text: "", smartData: res, requestNarrative: trimmed },
+          {
+            role: "ai",
+            text: "",
+            smartData: res,
+            requestNarrative: trimmed,
+            isLowConfidence: isGenericOrLowConfidence(res, trimmed),
+          },
         ]);
 
         // Check for automatic civic handoff
         const automaticLaunch = resolveAutomaticCivicHandoff(res, trimmed, state.language.code);
         if (automaticLaunch && onOpenCivic) {
-          // Show transition message first, then navigate
           setPendingHandoff(automaticLaunch);
         }
       } catch (err) {
@@ -433,6 +433,36 @@ export function ChatModal({ open, initialText, onClose, onOpenCivic }: ChatModal
     },
     [isLoading, state.language.code, onOpenCivic]
   );
+
+  // Auto-send if requested on open
+  useEffect(() => {
+    if (open && initialText && autoSend) {
+      doSend(initialText);
+    } else if (open && initialText) {
+      setInput(initialText);
+    }
+  }, [open, initialText, autoSend, doSend]);
+
+  // Handle voice recording submission inside chat
+  useEffect(() => {
+    if (!audioBlob || audioBlob.size === 0) return;
+
+    const sendChatVoice = async () => {
+      setIsLoading(true);
+      try {
+        const res = await smartVoice(audioBlob, state.language.code);
+        if (res.transcript && res.transcript.trim()) {
+          doSend(res.transcript.trim());
+        }
+      } catch (err) {
+        console.error("Chat voice error:", err);
+      } finally {
+        clearRecording();
+      }
+    };
+
+    sendChatVoice();
+  }, [audioBlob, state.language.code, doSend, clearRecording]);
 
   const handleRetry = useCallback(() => {
     if (lastUserText) doSend(lastUserText);
@@ -456,7 +486,7 @@ export function ChatModal({ open, initialText, onClose, onOpenCivic }: ChatModal
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             onClick={onClose}
-            style={{ background: "rgba(0,0,0,0.5)", backdropFilter: "blur(2px)" }}
+            style={{ background: "rgba(0,0,0,0.55)", backdropFilter: "blur(4px)" }}
             aria-hidden="true"
           />
 
@@ -466,9 +496,9 @@ export function ChatModal({ open, initialText, onClose, onOpenCivic }: ChatModal
             id="chat-modal"
             role="dialog"
             aria-modal="true"
-            aria-label="LAWTRIX Chat Assistant"
+            aria-label="LAWTRIX Assistant"
             aria-describedby={statusId}
-            className="fixed top-0 right-0 bottom-0 z-[60] flex flex-col w-full md:w-[480px] md:max-w-[90vw] relative overflow-hidden"
+            className="fixed top-0 right-0 bottom-0 z-[60] flex flex-col w-full md:w-[500px] md:max-w-[92vw] relative overflow-hidden"
             initial={{ x: "100%" }}
             animate={{ x: 0 }}
             exit={{ x: "100%" }}
@@ -476,7 +506,7 @@ export function ChatModal({ open, initialText, onClose, onOpenCivic }: ChatModal
             style={{
               background: "var(--color-bg)",
               borderLeft: "1px solid var(--color-border-bright)",
-              boxShadow: "-12px 0 48px rgba(0,0,0,0.35)",
+              boxShadow: "-12px 0 48px rgba(0,0,0,0.45)",
             }}
           >
             {/* Intent detection handoff overlay */}
@@ -492,29 +522,28 @@ export function ChatModal({ open, initialText, onClose, onOpenCivic }: ChatModal
               style={{ borderColor: "var(--color-border)" }}
             >
               <div className="flex items-center gap-2.5">
-                <Logo size={22} />
+                <Logo size={24} />
                 <div>
-                  <h2 className="font-semibold text-sm leading-tight" style={{ color: "var(--color-text)" }}>
+                  <h2 className="font-bold text-sm leading-tight tracking-tight" style={{ color: "var(--color-text)" }}>
                     LAWTRIX
                   </h2>
-                  <p className="text-[9px] leading-none" style={{ color: "var(--color-text-faint)" }}>
-                    Civic &amp; Legal Assistant
+                  <p className="text-[10px] leading-none" style={{ color: "var(--color-text-muted)" }}>
+                    Civic &amp; Legal Action Assistant
                   </p>
                 </div>
               </div>
 
               <button
                 onClick={onClose}
-                className="w-9 h-9 rounded-full flex items-center justify-center text-sm
-                           transition-colors hover:bg-opacity-80 focus-visible:outline-none focus-visible:ring-2"
+                className="w-9 h-9 rounded-full flex items-center justify-center text-sm transition-colors hover:bg-opacity-80 focus-visible:outline-none focus-visible:ring-2"
                 style={{ color: "var(--color-text-muted)", background: "var(--color-surface)" }}
-                aria-label="Close chat"
+                aria-label="Close assistant"
               >
                 ✕
               </button>
             </div>
 
-            {/* ── Messages ── */}
+            {/* ── Messages Log ── */}
             <div
               className="flex-1 overflow-y-auto px-4 py-4 flex flex-col gap-3 min-h-0"
               role="log"
@@ -523,22 +552,24 @@ export function ChatModal({ open, initialText, onClose, onOpenCivic }: ChatModal
             >
               {/* Empty state */}
               {messages.length === 0 && (
-                <div className="text-center py-8 flex flex-col items-center gap-2">
-                  <span className="text-4xl" aria-hidden>💬</span>
+                <div className="text-center py-8 flex flex-col items-center gap-2.5">
+                  <span className="text-4xl" aria-hidden="true">
+                    💬
+                  </span>
                   <p
                     id={statusId}
-                    className="text-base font-semibold"
-                    style={{ color: "var(--color-text-muted)" }}
+                    className="text-lg font-bold"
+                    style={{ color: "var(--color-text)" }}
                   >
                     Tell us what happened
                   </p>
-                  <p className="text-xs max-w-[240px]" style={{ color: "var(--color-text-faint)" }}>
-                    Describe your situation in plain language. We&apos;ll find the right path.
+                  <p className="text-xs max-w-[260px] leading-relaxed" style={{ color: "var(--color-text-muted)" }}>
+                    Describe your situation in plain language. We&apos;ll help you find the right path and prepare the action.
                   </p>
                 </div>
               )}
 
-              {/* Message list */}
+              {/* Message items */}
               {messages.map((m, i) => (
                 <motion.div
                   key={i}
@@ -550,13 +581,13 @@ export function ChatModal({ open, initialText, onClose, onOpenCivic }: ChatModal
                   {m.role === "user" ? (
                     <div
                       className="rounded-2xl rounded-br-sm px-4 py-2.5 text-sm leading-relaxed"
-                      style={{ background: "var(--color-accent-dim)", color: "var(--color-accent)" }}
+                      style={{ background: "var(--color-primary-dim)", color: "var(--color-primary)", border: "1px solid rgba(167,139,250,0.3)" }}
                     >
                       {m.text}
                     </div>
                   ) : m.isError ? (
                     <ErrorBubble onRetry={handleRetry} />
-                  ) : needsCategoryPicker(m.smartData) ? (
+                  ) : m.isLowConfidence ? (
                     <LowConfidencePicker onSelect={doSend} disabled={isLoading} />
                   ) : m.smartData ? (
                     <ResponseCard
@@ -580,7 +611,7 @@ export function ChatModal({ open, initialText, onClose, onOpenCivic }: ChatModal
                 </motion.div>
               ))}
 
-              {/* Loading dots */}
+              {/* Loading indicator */}
               {isLoading && (
                 <div
                   className="self-start flex items-center gap-2 px-4 py-3"
@@ -596,22 +627,22 @@ export function ChatModal({ open, initialText, onClose, onOpenCivic }: ChatModal
                       transition={{ repeat: Infinity, duration: 0.7, delay: i * 0.15 }}
                     />
                   ))}
-                  <span className="text-xs ml-1" style={{ color: "var(--color-text-faint)" }}>
+                  <span className="text-xs ml-1 font-medium" style={{ color: "var(--color-text-muted)" }}>
                     Finding the right path…
                   </span>
                 </div>
               )}
 
-              <div ref={endRef} aria-hidden />
+              <div ref={endRef} aria-hidden="true" />
             </div>
 
-            {/* ── Quick chips ── */}
+            {/* ── Quick Chips on Empty State ── */}
             {messages.length === 0 && (
               <div
                 className="px-4 pb-2 shrink-0 overflow-x-auto"
                 style={{ scrollbarWidth: "none" }}
                 role="group"
-                aria-label="Quick situation starters"
+                aria-label="Common situation suggestions"
               >
                 <div className="flex gap-2 pb-1">
                   {QUICK_CHIPS.map((c) => (
@@ -629,14 +660,36 @@ export function ChatModal({ open, initialText, onClose, onOpenCivic }: ChatModal
               </div>
             )}
 
-            {/* ── Input area ── */}
+            {/* ── Unified Input Area (Text + Mic) ── */}
             <div
-              className="flex items-end gap-2 px-4 py-3 border-t shrink-0"
+              className="flex items-center gap-2 px-4 py-3 border-t shrink-0"
               style={{ borderColor: "var(--color-border)" }}
             >
+              {/* Inline Mic Button */}
+              <button
+                type="button"
+                onClick={isRecording ? stopRecording : startRecording}
+                className={`p-2.5 rounded-full transition-all shrink-0 ${
+                  isRecording ? "animate-pulse" : "hover:scale-105"
+                }`}
+                style={{
+                  background: isRecording ? "rgba(239,68,68,0.25)" : "var(--color-surface)",
+                  color: isRecording ? "#ef4444" : "var(--color-primary)",
+                  border: isRecording ? "1px solid #ef4444" : "1px solid var(--color-border)",
+                  minHeight: "44px",
+                  minWidth: "44px",
+                }}
+                aria-label={isRecording ? "Stop voice recording" : "Speak your message"}
+              >
+                <span className="text-base" aria-hidden="true">
+                  {isRecording ? "⏹️" : "🎙️"}
+                </span>
+              </button>
+
               <label htmlFor="chat-input" className="sr-only">
-                Describe your situation
+                Tell us what happened or what you need
               </label>
+
               <input
                 ref={inputRef}
                 id="chat-input"
@@ -648,8 +701,12 @@ export function ChatModal({ open, initialText, onClose, onOpenCivic }: ChatModal
                     doSend(input);
                   }
                 }}
-                placeholder="Describe your situation…"
-                disabled={isLoading}
+                placeholder={
+                  isRecording
+                    ? "Listening... tap stop to send"
+                    : "Tell us what happened or what you need…"
+                }
+                disabled={isLoading || isRecording}
                 autoComplete="off"
                 className="flex-1 bg-transparent text-sm outline-none disabled:opacity-50 leading-relaxed"
                 style={{
@@ -658,20 +715,16 @@ export function ChatModal({ open, initialText, onClose, onOpenCivic }: ChatModal
                   paddingTop: "10px",
                   paddingBottom: "10px",
                 }}
-                aria-label="Describe your situation"
-                aria-describedby={messages.length === 0 ? statusId : undefined}
+                aria-label="Tell us what happened or what you need"
               />
+
               <button
                 onClick={() => doSend(input)}
-                disabled={!input.trim() || isLoading}
-                className="px-4 py-2.5 rounded-full text-xs font-semibold transition-all
-                           disabled:opacity-40 disabled:cursor-not-allowed
-                           hover:scale-[1.03] active:scale-[0.97]
-                           focus-visible:outline-none focus-visible:ring-2"
+                disabled={!input.trim() || isLoading || isRecording}
+                className="px-4 py-2.5 rounded-xl text-xs font-bold transition-all disabled:opacity-40 disabled:cursor-not-allowed hover:scale-[1.02] active:scale-[0.98] focus-visible:outline-none focus-visible:ring-2 shrink-0"
                 style={{
-                  background: "var(--color-primary-dim)",
-                  color: "var(--color-primary)",
-                  border: "1px solid var(--color-primary)",
+                  background: "linear-gradient(135deg, var(--color-primary), #818cf8)",
+                  color: "#0a0a1a",
                   minHeight: "44px",
                   minWidth: "64px",
                 }}
@@ -683,10 +736,10 @@ export function ChatModal({ open, initialText, onClose, onOpenCivic }: ChatModal
 
             {/* Disclaimer */}
             <p
-              className="text-[9px] text-center px-4 pb-3 shrink-0"
+              className="text-[10px] text-center px-4 pb-3 shrink-0"
               style={{ color: "var(--color-text-faint)" }}
             >
-              Not legal advice. Consult a qualified lawyer for your specific situation.
+              Not legal advice. Consult a qualified lawyer for case-specific guidance.
             </p>
           </motion.div>
         </>

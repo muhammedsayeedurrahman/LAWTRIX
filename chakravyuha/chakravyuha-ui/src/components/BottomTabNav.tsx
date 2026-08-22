@@ -7,50 +7,67 @@ interface BottomTabNavProps {
 }
 
 const TABS = [
-  { id: "home",  icon: "🏠",  label: "Home",   ariaLabel: "Go to home" },
-  { id: "chat",  icon: "💬",  label: "Chat",   ariaLabel: "Open chat assistant" },
-  { id: "civic", icon: "🧭",  label: "Cases",  ariaLabel: "View active cases and workflows" },
-  { id: "help",  icon: "❓",  label: "Help",   ariaLabel: "Get help" },
+  { id: "home",  icon: "🏠",  label: "Home",  ariaLabel: "Go to home view" },
+  { id: "civic", icon: "📁",  label: "Cases", ariaLabel: "View your cases and actions" },
+  { id: "help",  icon: "❓",  label: "Help",  ariaLabel: "Emergency and legal helplines" },
 ];
 
 export function BottomTabNav({ onTabChange, activeTab, caseCount = 0 }: BottomTabNavProps) {
   return (
-    <nav
-      className="fixed bottom-0 left-0 right-0 z-50 glass-bright flex justify-around py-2 px-2"
-      role="navigation"
-      aria-label="Main navigation"
-      suppressHydrationWarning
-    >
-      {TABS.map((tab) => {
-        const isActive = activeTab === tab.id || (tab.id === "civic" && ["civic", "draft", "file"].includes(activeTab));
-        const showBadge = tab.id === "civic" && caseCount > 0;
+    <div className="fixed bottom-3 left-0 right-0 z-50 flex justify-center px-4 pointer-events-none">
+      <nav
+        className="pointer-events-auto flex items-center gap-1.5 p-1.5 rounded-full shadow-2xl transition-all"
+        style={{
+          background: "rgba(15, 15, 35, 0.92)",
+          backdropFilter: "blur(20px)",
+          WebkitBackdropFilter: "blur(20px)",
+          border: "1px solid var(--color-border-bright)",
+          boxShadow: "0 8px 32px rgba(0, 0, 0, 0.5), 0 0 15px rgba(167, 139, 250, 0.15)",
+        }}
+        role="navigation"
+        aria-label="Main navigation"
+        suppressHydrationWarning
+      >
+        {TABS.map((tab) => {
+          const isActive =
+            activeTab === tab.id ||
+            (tab.id === "civic" && ["civic", "draft", "file"].includes(activeTab));
+          const showBadge = tab.id === "civic" && caseCount > 0;
 
-        return (
-          <button
-            key={tab.id}
-            onClick={() => onTabChange(tab.id === "help" ? "home" : tab.id)}
-            className={`bottom-nav-tab ${isActive ? "active" : ""}`}
-            aria-label={tab.ariaLabel}
-            aria-current={isActive ? "page" : undefined}
-            suppressHydrationWarning
-          >
-            <span className="relative text-lg" aria-hidden="true">
-              {tab.icon}
-              {showBadge && (
-                <span
-                  className="absolute -top-1 -right-2 min-w-[14px] h-[14px] rounded-full flex items-center
-                             justify-center text-[9px] font-bold leading-none"
-                  style={{ background: "var(--color-primary)", color: "var(--color-bg)" }}
-                  aria-label={`${caseCount} active case${caseCount !== 1 ? "s" : ""}`}
-                >
-                  {caseCount > 9 ? "9+" : caseCount}
-                </span>
-              )}
-            </span>
-            {tab.label}
-          </button>
-        );
-      })}
-    </nav>
+          return (
+            <button
+              key={tab.id}
+              onClick={() => onTabChange(tab.id)}
+              className={`flex items-center gap-2 px-4 py-2 rounded-full text-xs font-semibold transition-all focus:outline-none focus-visible:ring-2 ${
+                isActive ? "shadow-md" : "hover:bg-white/5 opacity-80 hover:opacity-100"
+              }`}
+              style={{
+                background: isActive ? "var(--color-primary-dim)" : "transparent",
+                color: isActive ? "var(--color-primary)" : "var(--color-text-muted)",
+                border: isActive ? "1px solid rgba(167, 139, 250, 0.3)" : "1px solid transparent",
+                minHeight: "36px",
+              }}
+              aria-label={tab.ariaLabel}
+              aria-current={isActive ? "page" : undefined}
+              suppressHydrationWarning
+            >
+              <span className="relative text-sm" aria-hidden="true">
+                {tab.icon}
+                {showBadge && (
+                  <span
+                    className="absolute -top-1 -right-2 min-w-[14px] h-[14px] rounded-full flex items-center justify-center text-[9px] font-bold leading-none"
+                    style={{ background: "var(--color-primary)", color: "var(--color-bg)" }}
+                    aria-label={`${caseCount} active cases`}
+                  >
+                    {caseCount > 9 ? "9+" : caseCount}
+                  </span>
+                )}
+              </span>
+              <span>{tab.label}</span>
+            </button>
+          );
+        })}
+      </nav>
+    </div>
   );
 }

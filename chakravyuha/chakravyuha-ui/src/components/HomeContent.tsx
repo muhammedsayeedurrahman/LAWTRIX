@@ -1,13 +1,11 @@
 "use client";
 
-import { Suspense, lazy, useState, useCallback, useRef } from "react";
+import { useState, useCallback, useRef } from "react";
 import { ErrorBoundary } from "@/components/ErrorBoundary";
 import { Header } from "@/components/Header";
 import { HeroSection } from "@/components/HeroSection";
-import { LawSection } from "@/components/LawSection";
 import { BottomTabNav } from "@/components/BottomTabNav";
 import { ChatModal } from "@/components/ChatModal";
-import { Card } from "@/components/Card";
 import { ComplaintDraftCard } from "@/components/ComplaintDraftCard";
 import { OpenClawCard } from "@/components/OpenClawCard";
 import { CivicAssistant, type CivicFilingHandoff, type CivicJourney } from "@/components/CivicAssistant";
@@ -16,16 +14,12 @@ import { Preloader } from "@/components/Preloader";
 import { CurtainTransition } from "@/components/CurtainTransition";
 import { useApp } from "@/context/AppContext";
 
-// Voice card is heavy — lazy-load it
-const VoiceCard = lazy(() =>
-  import("@/components/VoiceCard").then((m) => ({ default: m.VoiceCard }))
-);
-
 export default function HomeContent() {
   const { state } = useApp();
   const [activeTab, setActiveTab] = useState("home");
   const [chatOpen, setChatOpen] = useState(false);
   const [chatInitialText, setChatInitialText] = useState<string | undefined>(undefined);
+  const [chatAutoSend, setChatAutoSend] = useState<boolean>(false);
   const [loaded, setLoaded] = useState(false);
   const [showCurtain, setShowCurtain] = useState(false);
   const [civicJourney, setCivicJourney] = useState<CivicJourney>("rti");
@@ -43,34 +37,28 @@ export default function HomeContent() {
         setActiveTab(tab);
         prevTabRef.current = tab;
         setShowCurtain(false);
-      }, 400);
+      }, 350);
     } else {
       setActiveTab(tab);
       prevTabRef.current = tab;
     }
   }, []);
 
-  /** Open the chat modal, optionally with a pre-filled message */
-  const handleStartChat = useCallback((prefilledText?: string) => {
-    setChatInitialText(prefilledText ?? "");
-    setChatOpen(true);
-    setActiveTab("chat");
-    prevTabRef.current = "chat";
-  }, []);
-
-  const handleOpenCivic = useCallback((journey: CivicJourney = "rti") => {
-    setCivicJourney(journey);
-    setCivicContext(null);
-    setCivicLaunchVersion((v) => v + 1);
-    switchTab("civic");
-  }, [switchTab]);
+  /** Open the chat assistant with optional pre-filled text and auto-send */
+  const handleStartChat = useCallback(
+    (prefilledText?: string, options?: { autoSend?: boolean }) => {
+      setChatInitialText(prefilledText ?? "");
+      setChatAutoSend(options?.autoSend ?? false);
+      setChatOpen(true);
+    },
+    []
+  );
 
   /** Called when chat intent detection resolves to a civic workflow */
   const handleChatCivicHandoff = useCallback((launch: CivicWorkflowLaunch) => {
-    // The ChatHandoffTransition component inside ChatModal already showed the
-    // "Got it. Preparing your grievance..." message before this fires.
     setChatOpen(false);
     setChatInitialText(undefined);
+    setChatAutoSend(false);
     setCivicJourney(launch.journey);
     setCivicContext(launch);
     setCivicLaunchVersion((v) => v + 1);
@@ -80,16 +68,8 @@ export default function HomeContent() {
   const handleCloseChat = useCallback(() => {
     setChatOpen(false);
     setChatInitialText(undefined);
-    if (prevTabRef.current === "chat") {
-      setActiveTab("home");
-      prevTabRef.current = "home";
-    }
+    setChatAutoSend(false);
   }, []);
-
-  const handleOpenFile = useCallback((portal?: string) => {
-    setFilingHandoff(portal ? { portalId: portal, userData: {} } : null);
-    switchTab("file");
-  }, [switchTab]);
 
   const handleCivicFilingHandoff = useCallback((handoff: CivicFilingHandoff) => {
     setFilingHandoff(handoff);
@@ -105,19 +85,26 @@ export default function HomeContent() {
   }, [handleStartChat, switchTab]);
 
   const handleTabChange = useCallback((tab: string) => {
-    if (tab === "chat") {
-      handleStartChat();
+    if (tab === "help") {
+      // Smooth scroll to trust / helpline section if on home, or switch to home then scroll
+      if (activeTab !== "home") {
+        switchTab("home");
+        setTimeout(() => {
+          document.getElementById("trust-section")?.scrollIntoView({ behavior: "smooth" });
+        }, 400);
+      } else {
+        document.getElementById("trust-section")?.scrollIntoView({ behavior: "smooth" });
+      }
       return;
     }
     if (tab === "civic") {
-      // If we're already on a civic workflow, just no-op or go to civic home
       if (!["civic", "draft", "file"].includes(activeTab)) {
         switchTab("civic");
       }
       return;
     }
     switchTab(tab);
-  }, [activeTab, handleStartChat, switchTab]);
+  }, [activeTab, switchTab]);
 
   // Count active cases for badge
   const caseCount = state.caseList?.length ?? 0;
@@ -130,7 +117,7 @@ export default function HomeContent() {
 
   return (
     <div
-      className="min-h-screen flex flex-col pb-20 bg-grid relative"
+      className="min-h-screen flex flex-col pb-24 bg-grid relative selection:bg-purple-500 selection:text-white"
       style={{ backgroundColor: "var(--color-bg)" }}
     >
       {/* Curtain transition overlay */}
@@ -140,7 +127,7 @@ export default function HomeContent() {
 
       <main
         id="main-content"
-        className="flex-1 max-w-3xl mx-auto w-full flex flex-col gap-8 py-6 relative z-10"
+        className="flex-1 max-w-3xl mx-auto w-full flex flex-col gap-8 py-4 relative z-10"
         tabIndex={-1}
       >
         {activeTab === "file" ? (
@@ -173,69 +160,92 @@ export default function HomeContent() {
           <>
             <HeroSection onStartChat={handleStartChat} />
 
-            <LawSection onOpenChat={handleStartChat} />
-
-            {/* Voice card — secondary feature, below the fold */}
-            <ErrorBoundary>
-              <div className="px-4">
-                <Card>
-                  <Card.Header>
-                    <div className="flex items-center gap-3">
-                      <span className="text-2xl" aria-hidden>🎤</span>
-                      <div>
-                        <h2 className="font-bold text-sm" style={{ color: "var(--color-text)" }}>
-                          Speak your situation
-                        </h2>
-                        <p className="text-xs" style={{ color: "var(--color-text-muted)" }}>
-                          Multilingual voice input in 10+ Indian languages
-                        </p>
-                      </div>
-                    </div>
-                  </Card.Header>
-                  <Card.Body>
-                    <Suspense
-                      fallback={
-                        <div
-                          className="flex items-center justify-center py-10 text-sm"
-                          style={{ color: "var(--color-text-faint)" }}
-                        >
-                          Loading voice assistant…
-                        </div>
-                      }
+            {/* ── Secondary Trust & Helplines Area ── */}
+            <section
+              id="trust-section"
+              className="px-4 flex flex-col gap-4 mt-2"
+              aria-labelledby="helplines-heading"
+            >
+              <div
+                className="rounded-2xl p-4 flex flex-col sm:flex-row items-center justify-between gap-3 text-xs"
+                style={{
+                  background: "rgba(10, 10, 26, 0.6)",
+                  border: "1px solid var(--color-border)",
+                }}
+              >
+                <div className="flex items-center gap-3">
+                  <span className="text-2xl" aria-hidden="true">
+                    🛡️
+                  </span>
+                  <div>
+                    <h3
+                      id="helplines-heading"
+                      className="font-bold text-sm"
+                      style={{ color: "var(--color-text)" }}
                     >
-                      <VoiceCard />
-                    </Suspense>
-                  </Card.Body>
-                </Card>
+                      Emergency &amp; Official Legal Aid
+                    </h3>
+                    <p style={{ color: "var(--color-text-muted)" }}>
+                      National toll-free citizen helplines:
+                    </p>
+                  </div>
+                </div>
+
+                <div className="flex flex-wrap items-center gap-2">
+                  <a
+                    href="tel:15100"
+                    className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl font-bold transition-all hover:scale-105"
+                    style={{
+                      background: "rgba(167, 139, 250, 0.15)",
+                      color: "var(--color-primary)",
+                      border: "1px solid rgba(167, 139, 250, 0.3)",
+                    }}
+                    aria-label="Call NALSA Free Legal Aid 15100"
+                  >
+                    <span>NALSA Legal Aid:</span>
+                    <span className="underline">15100</span>
+                  </a>
+
+                  <a
+                    href="tel:112"
+                    className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl font-bold transition-all hover:scale-105"
+                    style={{
+                      background: "rgba(239, 68, 68, 0.12)",
+                      color: "#ef4444",
+                      border: "1px solid rgba(239, 68, 68, 0.25)",
+                    }}
+                    aria-label="Call National Emergency 112"
+                  >
+                    <span>Emergency:</span>
+                    <span className="underline">112</span>
+                  </a>
+                </div>
               </div>
-            </ErrorBoundary>
+
+              {/* Legal Disclaimer */}
+              <p
+                className="text-[11px] text-center px-4 leading-relaxed"
+                style={{ color: "var(--color-text-faint)" }}
+              >
+                LAWTRIX provides structured civic pathways and legal orientation. It is not formal legal counsel. For representation in court, consult a certified advocate or your State Legal Services Authority.
+              </p>
+            </section>
           </>
         )}
-
-        {/* Disclaimer — always visible */}
-        <p
-          className="text-xs text-center px-4"
-          style={{ color: "var(--color-text-faint)" }}
-        >
-          Not legal advice. Consult a qualified lawyer for your specific situation.{" "}
-          <span aria-hidden>·</span> NALSA free legal aid:{" "}
-          <a href="tel:15100" className="underline" style={{ color: "var(--color-primary)" }}>
-            15100
-          </a>
-        </p>
       </main>
 
-      {/* Bottom navigation */}
+      {/* Sleek Floating Bottom Navigation */}
       <BottomTabNav
         activeTab={isOnCivicVariant ? "civic" : activeTab}
         onTabChange={handleTabChange}
         caseCount={caseCount}
       />
 
-      {/* Chat modal */}
+      {/* Unified Chat Assistant Modal */}
       <ChatModal
         open={chatOpen}
         initialText={chatInitialText}
+        autoSend={chatAutoSend}
         onClose={handleCloseChat}
         onOpenCivic={handleChatCivicHandoff}
       />
