@@ -585,7 +585,7 @@ export function OpenClawCard({ initialPortalId = "", initialUserData }: { initia
                 <div><dt style={{ color: "var(--color-text-faint)" }}>State / district</dt><dd style={{ color: "var(--color-text)" }}>{[form.state, form.district].filter(Boolean).join(", ")}</dd></div>
                 <div><dt style={{ color: "var(--color-text-faint)" }}>Contact</dt><dd style={{ color: "var(--color-text)" }}>{form.mobile || form.email}</dd></div>
                 {form.subject && <div className="col-span-2"><dt style={{ color: "var(--color-text-faint)" }}>Subject</dt><dd style={{ color: "var(--color-text)" }}>{form.subject}</dd></div>}
-                <div className="col-span-2"><dt style={{ color: "var(--color-text-faint)" }}>Description</dt><dd className="mt-1 max-h-36 overflow-y-auto whitespace-pre-wrap rounded-lg p-2" style={{ color: "var(--color-text-muted)", background: "rgba(0,0,0,0.18)" }}>{form.description}</dd></div>
+                <div className="col-span-2"><dt style={{ color: "var(--color-text-faint)" }}>Description</dt><dd className="mt-1 max-h-36 overflow-y-auto whitespace-pre-wrap rounded-lg p-2" style={{ color: "var(--color-text-muted)", background: "var(--color-surface-elevated)" }}>{form.description}</dd></div>
               </dl>
               <label className="mt-3 flex cursor-pointer items-start gap-2 text-xs" style={{ color: "var(--color-text-muted)" }}>
                 <input type="checkbox" checked={reviewAccepted} onChange={(event) => setReviewAccepted(event.target.checked)} className="mt-0.5" />

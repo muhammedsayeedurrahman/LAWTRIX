@@ -90,7 +90,7 @@ const JOURNEYS: Array<{
 ];
 
 const INPUT_STYLE: CSSProperties = {
-  background: "rgba(0,0,0,0.2)",
+  background: "var(--color-input-bg)",
   color: "var(--color-text)",
   border: "1px solid var(--color-border)",
 };
@@ -312,7 +312,7 @@ function ProvenanceBlock({ provenance, sources }: { provenance?: CivicProvenance
   const visible = entries.filter((entry) => entry.source || entry.source_url || entry.last_verified || entry.status || entry.jurisdiction);
   if (visible.length === 0) return null;
   return (
-    <div className="space-y-1.5 rounded-xl p-3 text-[10px]" style={{ background: "rgba(0,0,0,0.16)", border: "1px solid var(--color-border)" }}>
+    <div className="space-y-1.5 rounded-xl p-3 text-[10px]" style={{ background: "var(--color-surface-elevated)", border: "1px solid var(--color-border)" }}>
       <p className="font-semibold uppercase tracking-wider" style={{ color: "var(--color-secondary)" }}>Source and verification</p>
       {visible.map((entry, index) => {
         const href = safeExternalUrl(entry.source_url);
@@ -625,7 +625,7 @@ function RTIAssistant({ initialIssue = "" }: { initialIssue?: string }) {
               <div className="space-y-3">
                 <MissingInformation items={draft.missing_information} />
                 {documentText ? (
-                  <pre className="max-h-[520px] overflow-y-auto whitespace-pre-wrap rounded-xl p-4 text-xs leading-relaxed" style={{ ...INPUT_STYLE, background: "rgba(0,0,0,0.25)" }}>{documentText}</pre>
+                  <pre className="max-h-[520px] overflow-y-auto whitespace-pre-wrap rounded-xl p-4 text-xs leading-relaxed" style={{ ...INPUT_STYLE, background: "var(--color-surface-elevated)" }}>{documentText}</pre>
                 ) : (
                   <Notice tone="warning">A document was not generated. Complete the missing information and try again.</Notice>
                 )}
@@ -1190,7 +1190,7 @@ function CPGRAMSAssistant({
                   title={handoffMachine.phase === "REVIEWED" ? "Reviewed draft" : "Human confirmation required"}
                   description="Continuing transfers only this reviewed draft and non-sensitive routing hints to the existing filing screen. It does not submit the grievance."
                 />
-                <div className="rounded-xl p-3 text-xs" style={{ background: "rgba(0,0,0,0.2)", border: "1px solid var(--color-border)" }}>
+                <div className="rounded-xl p-3 text-xs" style={{ background: "var(--color-surface-elevated)", border: "1px solid var(--color-border)" }}>
                   <p className="font-semibold" style={{ color: "var(--color-text)" }}>{subject}</p>
                   <p className="mt-2 max-h-44 overflow-y-auto whitespace-pre-wrap" style={{ color: "var(--color-text-muted)" }}>{draftText}</p>
                 </div>

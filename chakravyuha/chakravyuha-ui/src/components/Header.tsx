@@ -44,7 +44,7 @@ export function Header() {
         className="sticky top-0 z-50 flex items-center justify-between px-4 sm:px-6 py-3.5"
         role="banner"
         style={{
-          background: "rgba(10, 10, 26, 0.88)",
+          background: "var(--color-header-bg)",
           backdropFilter: "blur(20px)",
           WebkitBackdropFilter: "blur(20px)",
           borderBottom: "1px solid var(--color-border)",

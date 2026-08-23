@@ -143,7 +143,7 @@ export function ComplaintDraftCard() {
                 rows={4}
                 className="w-full rounded-xl px-3 py-2.5 text-sm resize-none outline-none disabled:opacity-50"
                 style={{
-                  background: "rgba(0,0,0,0.2)",
+                  background: "var(--color-input-bg)",
                   color: "var(--color-text)",
                   border: "1px solid var(--color-border)",
                 }}
@@ -163,7 +163,7 @@ export function ComplaintDraftCard() {
                   disabled={loading}
                   className="w-full rounded-lg px-3 py-2 text-xs outline-none disabled:opacity-50"
                   style={{
-                    background: "rgba(0,0,0,0.2)",
+                    background: "var(--color-input-bg)",
                     color: "var(--color-text)",
                     border: "1px solid var(--color-border)",
                   }}
@@ -180,7 +180,7 @@ export function ComplaintDraftCard() {
                   disabled={loading}
                   className="w-full rounded-lg px-3 py-2 text-xs outline-none disabled:opacity-50"
                   style={{
-                    background: "rgba(0,0,0,0.2)",
+                    background: "var(--color-input-bg)",
                     color: "var(--color-text)",
                     border: "1px solid var(--color-border)",
                   }}
@@ -361,7 +361,7 @@ export function ComplaintDraftCard() {
                 <pre
                   className="whitespace-pre-wrap text-xs leading-relaxed max-h-[400px] overflow-y-auto rounded-xl p-3"
                   style={{
-                    background: "rgba(0,0,0,0.25)",
+                    background: "var(--color-surface-elevated)",
                     color: "var(--color-text)",
                     border: "1px solid var(--color-border)",
                   }}

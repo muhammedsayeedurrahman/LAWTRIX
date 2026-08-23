@@ -16,13 +16,13 @@ export function BottomTabNav({ onTabChange, activeTab, caseCount = 0 }: BottomTa
   return (
     <div className="fixed bottom-3 left-0 right-0 z-50 flex justify-center px-4 pointer-events-none">
       <nav
-        className="pointer-events-auto flex items-center gap-1.5 p-1.5 rounded-full shadow-2xl transition-all"
+        className="pointer-events-auto flex items-center gap-1.5 p-1.5 rounded-full transition-all"
         style={{
-          background: "rgba(15, 15, 35, 0.92)",
-          backdropFilter: "blur(20px)",
-          WebkitBackdropFilter: "blur(20px)",
+          background: "var(--color-nav-bg)",
+          backdropFilter: "blur(24px)",
+          WebkitBackdropFilter: "blur(24px)",
           border: "1px solid var(--color-border-bright)",
-          boxShadow: "0 8px 32px rgba(0, 0, 0, 0.5), 0 0 15px rgba(167, 139, 250, 0.15)",
+          boxShadow: "var(--color-card-shadow)",
         }}
         role="navigation"
         aria-label="Main navigation"

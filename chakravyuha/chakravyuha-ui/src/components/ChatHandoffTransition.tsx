@@ -57,7 +57,7 @@ export function ChatHandoffTransition({ show, journey, onComplete }: ChatHandoff
           animate={{ opacity: 1, scale: 1 }}
           exit={{ opacity: 0, scale: 0.98 }}
           transition={{ duration: 0.25, ease: [0.16, 1, 0.3, 1] }}
-          style={{ background: "rgba(10, 10, 26, 0.96)", backdropFilter: "blur(12px)" }}
+          style={{ background: "var(--color-modal-bg)", backdropFilter: "blur(16px)" }}
           role="status"
           aria-live="polite"
           aria-label={`${msg.headline} ${msg.sub}`}

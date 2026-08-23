@@ -1,7 +1,9 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import { Inter, Playfair_Display } from "next/font/google";
 import "./globals.css";
 import { AppProvider } from "@/context/AppContext";
+import { InstallBanner } from "@/components/InstallBanner";
+import { OfflineIndicator } from "@/components/OfflineIndicator";
 
 const inter = Inter({
   subsets: ["latin"],
@@ -29,7 +31,17 @@ export const metadata: Metadata = {
     description: "Tell us what happened. We'll find the right government, legal, or welfare path.",
     type: "website",
   },
+  manifest: "/manifest.json",
+  appleWebApp: {
+    capable: true,
+    statusBarStyle: "default",
+    title: "LAWTRIX",
+  },
 };
+
+export const viewport: Viewport = {
+  themeColor: "#a78bfa",
+}
 
 export default function RootLayout({
   children,
@@ -39,7 +51,9 @@ export default function RootLayout({
   return (
     <html lang="en" data-theme="dark" suppressHydrationWarning>
       <body className={`${inter.variable} ${playfair.variable} font-sans antialiased`}>
+        <OfflineIndicator />
         <AppProvider>{children}</AppProvider>
+        <InstallBanner />
       </body>
     </html>
   );

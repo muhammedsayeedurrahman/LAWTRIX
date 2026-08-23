@@ -525,8 +525,9 @@ export function HeroSection({ onStartChat }: HeroSectionProps) {
                 idx === 4 ? "col-span-2 sm:col-span-1" : ""
               }`}
               style={{
-                background: "rgba(10, 10, 26, 0.5)",
+                background: "var(--color-surface-elevated)",
                 border: "1px solid var(--color-border)",
+                boxShadow: "var(--color-input-shadow)",
               }}
             >
               <span

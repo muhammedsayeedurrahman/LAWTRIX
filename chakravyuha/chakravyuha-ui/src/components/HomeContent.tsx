@@ -169,8 +169,9 @@ export default function HomeContent() {
               <div
                 className="rounded-2xl p-4 flex flex-col sm:flex-row items-center justify-between gap-3 text-xs"
                 style={{
-                  background: "rgba(10, 10, 26, 0.6)",
+                  background: "var(--color-surface-elevated)",
                   border: "1px solid var(--color-border)",
+                  boxShadow: "var(--color-card-shadow)",
                 }}
               >
                 <div className="flex items-center gap-3">

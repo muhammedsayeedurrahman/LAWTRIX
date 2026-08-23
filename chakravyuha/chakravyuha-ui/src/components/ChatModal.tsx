@@ -120,8 +120,9 @@ function LowConfidencePicker({
     <div
       className="rounded-2xl p-4 flex flex-col gap-3 text-sm"
       style={{
-        background: "rgba(10, 10, 26, 0.7)",
+        background: "var(--color-surface-elevated)",
         border: "1px solid var(--color-border-bright)",
+        boxShadow: "var(--color-card-shadow)",
       }}
       role="group"
       aria-label="Clarify what happened"
@@ -178,8 +179,9 @@ function ResponseCard({
     <div
       className="rounded-2xl p-4 flex flex-col gap-3 text-xs"
       style={{
-        background: "rgba(10, 10, 26, 0.75)",
+        background: "var(--color-surface-elevated)",
         border: "1px solid var(--color-border-bright)",
+        boxShadow: "var(--color-card-shadow)",
       }}
     >
       {/* Title + severity */}
