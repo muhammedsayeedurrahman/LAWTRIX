@@ -10,6 +10,9 @@ from contextlib import asynccontextmanager
 from fastapi import FastAPI, Request
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
+from slowapi import Limiter, _rate_limit_exceeded_handler
+from slowapi.util import get_remote_address
+from slowapi.errors import RateLimitExceeded
 
 from backend.config import get_settings
 from backend.routers import cases, cpgrams, forms, guided, legal, rti, schemes, voice
@@ -50,6 +53,24 @@ app = FastAPI(
     version="1.0.0",
     lifespan=lifespan,
 )
+
+# ── Rate Limiting ───────────────────────────────────────────────────────────
+# Configure rate limiter with Redis backend (falls back to in-memory if Redis unavailable)
+_redis_url = os.getenv("REDIS_URL", "")
+_storage_uri = _redis_url if _redis_url else "memory://"
+
+limiter = Limiter(
+    key_func=get_remote_address,
+    storage_uri=_storage_uri,
+    default_limits=["100/minute"],  # Global default: 100 requests per minute per IP
+    headers_enabled=True,  # Add X-RateLimit-* headers to responses
+)
+
+# Attach limiter to app state and register exception handler
+app.state.limiter = limiter
+app.add_exception_handler(RateLimitExceeded, _rate_limit_exceeded_handler)
+
+logger.info(f"Rate limiting configured with storage: {_storage_uri}")
 
 # CORS — SECURITY: NEVER use "*" with allow_credentials in production!
 _cors_origins_str = os.getenv("CORS_ORIGINS", "http://localhost:3000,http://localhost:3001")

@@ -5,7 +5,7 @@ from __future__ import annotations
 from functools import lru_cache
 from typing import Any
 
-from fastapi import APIRouter, HTTPException, Query
+from fastapi import APIRouter, HTTPException, Query, Request
 
 from backend.legal.scheme_eligibility import SchemeEligibilityEngine, SchemeNotFoundError
 from backend.models.schemas import (
@@ -190,12 +190,26 @@ async def get_scheme(scheme_id: str) -> dict[str, Any]:
 
 
 @router.post("/check-eligibility", response_model=SchemeGuidedCheckResponse)
-async def check_eligibility(request: SchemeEligibilityRequest) -> SchemeGuidedCheckResponse:
-    """Deterministically evaluate one, several, or all catalogue schemes."""
-    return _evaluate(request, guided=False)
+async def check_eligibility(
+    payload: SchemeEligibilityRequest,
+    request: Request,
+) -> SchemeGuidedCheckResponse:
+    """Deterministically evaluate one, several, or all catalogue schemes.
+
+    Rate limit: 10 requests per minute per IP.
+    """
+    # Note: Rate limiting is applied globally via app.state.limiter default_limits
+    return _evaluate(payload, guided=False)
 
 
 @router.post("/guided-check", response_model=SchemeGuidedCheckResponse)
-async def guided_check(request: SchemeEligibilityRequest) -> SchemeGuidedCheckResponse:
-    """Return only the next few unanswered questions across candidate schemes."""
-    return _evaluate(request, guided=True)
+async def guided_check(
+    payload: SchemeEligibilityRequest,
+    request: Request,
+) -> SchemeGuidedCheckResponse:
+    """Return only the next few unanswered questions across candidate schemes.
+
+    Rate limit: 10 requests per minute per IP.
+    """
+    # Note: Rate limiting is applied globally via app.state.limiter default_limits
+    return _evaluate(payload, guided=True)

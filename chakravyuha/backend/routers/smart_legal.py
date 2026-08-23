@@ -9,7 +9,7 @@ from __future__ import annotations
 import base64
 import logging
 
-from fastapi import APIRouter, File, Form, UploadFile
+from fastapi import APIRouter, File, Form, UploadFile, Request
 from pydantic import BaseModel, Field
 
 from backend.controllers.pipeline import process_query, _classify, get_pipeline_cache
@@ -63,9 +63,15 @@ class SmartVoiceResponse(BaseModel):
 # ── Endpoints ────────────────────────────────────────────────────────────────
 
 @router.post("/smart-query", response_model=SmartResponse)
-async def smart_query(request: SmartQueryRequest) -> SmartResponse:
-    """Classification-first legal query — delegates to 8-layer pipeline."""
-    return await process_query(request.query, request.language)
+async def smart_query(
+    payload: SmartQueryRequest,
+    request: Request,
+) -> SmartResponse:
+    """Classification-first legal query — delegates to 8-layer pipeline.
+
+    Rate limit: 100 requests per minute per IP (global default).
+    """
+    return await process_query(payload.query, payload.language)
 
 
 @router.post("/smart-voice", response_model=SmartVoiceResponse)
