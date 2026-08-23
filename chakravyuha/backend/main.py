@@ -51,15 +51,53 @@ app = FastAPI(
     lifespan=lifespan,
 )
 
-# CORS — restrict origins via env var; defaults to ["*"] for dev/hackathon
-_cors_origins = os.getenv("CORS_ORIGINS", "*").split(",")
+# CORS — SECURITY: NEVER use "*" with allow_credentials in production!
+_cors_origins_str = os.getenv("CORS_ORIGINS", "http://localhost:3000,http://localhost:3001")
+_cors_origins = [o.strip() for o in _cors_origins_str.split(",") if o.strip()]
+
+# Validate CORS configuration
+if "*" in _cors_origins and os.getenv("ENVIRONMENT") == "production":
+    raise ValueError("SECURITY ERROR: CORS_ORIGINS cannot be '*' in production with allow_credentials=True")
+
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=[o.strip() for o in _cors_origins],
+    allow_origins=_cors_origins,
     allow_credentials=True,
-    allow_methods=["*"],
-    allow_headers=["*"],
+    allow_methods=["GET", "POST", "PUT", "DELETE", "PATCH"],
+    allow_headers=["Content-Type", "Authorization", "Accept", "X-Requested-With"],
+    max_age=600,  # Cache preflight requests for 10 minutes
 )
+
+# Security headers middleware
+@app.middleware("http")
+async def add_security_headers(request: Request, call_next):
+    """Add security headers to all responses."""
+    response = await call_next(request)
+
+    # Prevent clickjacking
+    response.headers["X-Frame-Options"] = "DENY"
+
+    # Prevent MIME-type sniffing
+    response.headers["X-Content-Type-Options"] = "nosniff"
+
+    # Enable XSS protection
+    response.headers["X-XSS-Protection"] = "1; mode=block"
+
+    # Content Security Policy
+    response.headers["Content-Security-Policy"] = "default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval'; style-src 'self' 'unsafe-inline';"
+
+    # Referrer Policy
+    response.headers["Referrer-Policy"] = "strict-origin-when-cross-origin"
+
+    # Permissions Policy (Feature Policy)
+    response.headers["Permissions-Policy"] = "geolocation=(), microphone=(), camera=()"
+
+    # HTTPS redirect (only in production)
+    if os.getenv("ENVIRONMENT") == "production":
+        response.headers["Strict-Transport-Security"] = "max-age=31536000; includeSubDomains"
+
+    return response
+
 
 # Error handlers
 app.add_exception_handler(ApiError, api_error_handler)

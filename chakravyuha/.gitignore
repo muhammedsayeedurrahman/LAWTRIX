@@ -14,8 +14,22 @@ venv/
 .venv/
 env/
 
-# Environment variables
+# Environment variables - CRITICAL: Never commit these!
 .env
+.env.*
+**/.env
+**/.env.*
+*.env.local
+*.env.production
+*.env.development
+*.env.test
+backend/.env
+chakravyuha-ui/.env.local
+chakravyuha-ui/.env.production
+
+# EXCEPT .env.example files (these are templates, safe to commit)
+!.env.example
+!**/.env.example
 
 # ChromaDB vector store
 chromadb_index/
@@ -49,5 +63,17 @@ node_modules/
 # ChromaDB
 chromadb/
 
-# Misc
+# Logs
 *.log
+logs/
+
+# Database
+*.db
+*.sqlite
+*.sqlite3
+
+# Secrets and credentials
+secrets/
+*.pem
+*.key
+*.cert
